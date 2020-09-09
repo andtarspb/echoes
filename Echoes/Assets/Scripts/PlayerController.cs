@@ -35,7 +35,11 @@ public class PlayerController : MonoBehaviour
     [SerializeField]
     float blinkDelay = 0.5f;
 
-    public bool inSafeZone;    // if player in safe zone
+    public bool inSafeZone;    // if player in safe zone    
+
+    // turbo booster
+    public float booster = 1f;
+    public bool turboOn;
 
     void Start()
     {
@@ -55,8 +59,8 @@ public class PlayerController : MonoBehaviour
         direction = Vector3.up;
 
         nextTimeblink = Time.time;
-        nextTimeblinkSunken = Time.time;
-    }
+        nextTimeblinkSunken = Time.time;       
+}
 
     void FixedUpdate()
     {
@@ -73,6 +77,13 @@ public class PlayerController : MonoBehaviour
 
     void MovePlayer()
     {
+        float realThrust = thrust;
+        if (turboOn)
+        {
+            realThrust = thrust * booster;
+        }
+        
+
         // считаем расстояние от камеры до игрока, чтоб перемещаться только если курсор внутри ИКО
         float dst = Vector3.Distance(mousePos, transform.position) - Mathf.Abs(Camera.main.transform.position.z);
         //Debug.Log("dst to click: " + dst);
@@ -87,7 +98,7 @@ public class PlayerController : MonoBehaviour
         ////else 
         if (Input.GetMouseButton(0) && dst < radarRadius)
         {
-            Vector3 force = transform.up * thrust;
+            Vector3 force = transform.up * realThrust;
             rb.AddForce(force) ;
             //Debug.Log("Velocity: x = " + rb.velocity.x + "; y = " + rb.velocity.y + "; z = " + rb.velocity.z);
         }
@@ -104,7 +115,7 @@ public class PlayerController : MonoBehaviour
             float inputY = Input.GetAxisRaw("Vertical");
             Vector3 force = new Vector3(inputX, inputY, 0f);
 
-            rb.AddForce(Vector3.ClampMagnitude(force, 1) * thrust);
+            rb.AddForce(Vector3.ClampMagnitude(force, 1) * realThrust);
         }
         
     }
@@ -226,8 +237,11 @@ public class PlayerController : MonoBehaviour
         }
         if (other.tag == "dark_stop")
         {
-            audioManager.Play("radar_on");
-            radarRay.SetActive(true);
+            if (!radarRay.activeSelf)
+            {
+                audioManager.Play("radar_on");
+                radarRay.SetActive(true);
+            }       
         }
 
         // boss setion
