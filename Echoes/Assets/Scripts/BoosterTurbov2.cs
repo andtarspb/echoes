@@ -32,7 +32,6 @@ public class BoosterTurbov2 : MonoBehaviour
     // UI
     [SerializeField]
     BossBarScript slider;
-    float initTime;         // inital time
     bool startCountDown;    // when bar value is changes
 
     
@@ -42,6 +41,7 @@ public class BoosterTurbov2 : MonoBehaviour
         theplayer = GetComponent<PlayerController>();
         theRadar = FindObjectOfType<Rotate>();
 
+        // set player's and radar's values
         theplayer.booster = turboBoost;
         theRadar.radarBoost = radarBoost;
 
@@ -54,6 +54,7 @@ public class BoosterTurbov2 : MonoBehaviour
 
     void Booster()
     {
+        // set player's and radar's values
         theplayer.turboOn = turboOn;
         theRadar.turboOn = turboOn;
 

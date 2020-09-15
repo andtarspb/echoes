@@ -13,7 +13,7 @@ public class CameraController : MonoBehaviour
         followTarget = FindObjectOfType<PlayerController>();
     }
 
-    void Update()
+    void LateUpdate()
     {
         targetPosition = new Vector3(followTarget.transform.position.x, followTarget.transform.position.y, followTarget.transform.position.z - 10);
         transform.position = targetPosition;

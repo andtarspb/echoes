@@ -129,7 +129,7 @@ public class PlayerController : MonoBehaviour
     void OtherInput()
     {
 #if (UNITY_EDITOR)
-        if (Input.GetKeyDown(KeyCode.E))    // turn on/off radar
+        if (Input.GetKeyDown(KeyCode.P))    // turn on/off radar
         {
             isRadarOn = !isRadarOn;
             radarRay.SetActive(isRadarOn);
