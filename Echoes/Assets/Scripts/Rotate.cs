@@ -69,11 +69,12 @@ public class Rotate : MonoBehaviour
         //}
 
         // rotate ray
-        transform.Rotate(0.0f, 0.0f, -rotationDegree * Time.deltaTime);
+       
         if (turboOn)
         {
             transform.Rotate(0.0f, 0.0f, -(rotationDegree + radarBoost) * Time.deltaTime);
-        }
+        } else
+            transform.Rotate(0.0f, 0.0f, -rotationDegree * Time.deltaTime);
 
         // crate vector that we will allign our ray to
         Vector3 upVec = transform.TransformDirection(Vector3.up);

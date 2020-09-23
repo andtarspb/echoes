@@ -6,46 +6,50 @@ using UnityEngine.UI;
 public class PowerManager : MonoBehaviour
 {
     [SerializeField]
-    int batCap;                 // number of batteries
-    int batCharged;             // number of charged batteries
+    int batCap;                     // number of batteries
+    int batCharged;                 // number of charged batteries
 
-    int turboCap;               // number of batteries for turbo
-    int turboCharged;           // number of charged batteries for turbo
+    int turboCap;                   // number of batteries for turbo
+    int turboCharged;               // number of charged batteries for turbo
 
-    int shieldCap;               // number of batteries for shield
-    int shieldCharged;           // number of charged batteries for shield
+    int shieldCap;                  // number of batteries for shield
+    int shieldCharged;              // number of charged batteries for shield
 
-    int stealthCap;               // number of batteries for stealth
-    int stealthCharged;           // number of charged batteries for stealth
-
-    [SerializeField]
-    Sprite fullCharge;          // image of a full charge
-    [SerializeField]
-    Sprite emptyCharge;         // image of an empty charge 
+    int stealthCap;                 // number of batteries for stealth
+    int stealthCharged;             // number of charged batteries for stealth
 
     [SerializeField]
-    GameObject batteryPanel;    // whole battery panel
+    Sprite fullCharge;              // image of a full charge
     [SerializeField]
-    Image[] batteryChargesImg;  // images of battery charges
+    Sprite emptyCharge;             // image of an empty charge 
+
+    [SerializeField]
+    GameObject batteryPanel;        // whole battery panel
+    [SerializeField]
+    Image[] batteryChargesImg;      // images of battery charges
     
     [SerializeField]
-    GameObject turboPanel;      // whole turbo panel
+    GameObject turboPanel;          // whole turbo panel
     [SerializeField]
-    Image[] turboChargesImg;    // images of turbo battery charges
+    Image[] turboChargesImg;        // images of turbo battery charges
 
     [SerializeField]
-    GameObject shieldPanel;      // whole shield panel
+    GameObject shieldPanel;         // whole shield panel
     [SerializeField]
-    Image[] shieldChargesImg;    // images of shield battery charges
+    Image[] shieldChargesImg;       // images of shield battery charges
 
     [SerializeField]
-    GameObject stealthPanel;      // whole stealth panel
+    GameObject stealthPanel;        // whole stealth panel
     [SerializeField]
-    Image[] stealthChargesImg;    // images of stealth battery charges
+    Image[] stealthChargesImg;      // images of stealth battery charges
+
+
+    BoosterTurbov2 turboBooster;    // reference to turbo booster
 
     // Start is called before the first frame update
     void Start()
     {
+        // setting batery parameters
         batCharged = batCap;
 
         // setting turbo parameters
@@ -59,88 +63,72 @@ public class PowerManager : MonoBehaviour
         // setting stealth parameters
         stealthCap = 2;
         stealthCharged = 0;
+
+        // display charges
+        DisplayTurboCharges();
+        DisplayShieldCharges();
+        DisplayStealthCharges();
     }
 
     // Update is called once per frame
     void Update()
     {
         // DISPLAY TURBO CHARGES
-        if (Input.GetKeyDown(KeyCode.Alpha1) && Input.GetKey(KeyCode.LeftShift))
-        {           
-            if (turboCharged > 0)
-            {
-                Debug.Log("turbo--");
-                batCharged++;
-                turboCharged--;
-            }
-            
+        if (Input.GetKeyDown(KeyCode.Alpha1) && Input.GetKey(KeyCode.LeftShift) && turboCharged > 0)
+        {
+            //Debug.Log("turbo--");
+            batCharged++;
+            turboCharged--;
+            DisplayTurboCharges();
         }
-        else if (Input.GetKeyDown(KeyCode.Alpha1))
-        {            
-            if (batCharged > 0 && turboCharged < turboCap)
-            {
-                Debug.Log("turbo++");
-                batCharged--;
-                turboCharged++;
-            }
-           
+        else if (Input.GetKeyDown(KeyCode.Alpha1) && batCharged > 0 && turboCharged < turboCap)
+        {
+            //Debug.Log("turbo++");
+            batCharged--;
+            turboCharged++;
+            DisplayTurboCharges();
         }
 
         // DISPLAY SHIELD CHARGES
-        if (Input.GetKeyDown(KeyCode.Alpha2) && Input.GetKey(KeyCode.LeftShift))
+        if (Input.GetKeyDown(KeyCode.Alpha2) && Input.GetKey(KeyCode.LeftShift) && shieldCharged > 0)
         {
-            if (shieldCharged > 0)
-            {
-                Debug.Log("shield--");
-                batCharged++;
-                shieldCharged--;
-            }
-
+            //Debug.Log("shield--");
+            batCharged++;
+            shieldCharged--;
+            DisplayShieldCharges();
         }
-        else if(Input.GetKeyDown(KeyCode.Alpha2))
+        else if(Input.GetKeyDown(KeyCode.Alpha2) && batCharged > 0 && shieldCharged < shieldCap)
         {
-            if (batCharged > 0 && shieldCharged < shieldCap)
-            {
-                Debug.Log("shield++");
-                batCharged--;
-                shieldCharged++;
-            }
+            //Debug.Log("shield++");
+            batCharged--;
+            shieldCharged++;
+            DisplayShieldCharges();
         }
 
         // DISPLAY STEALTH CHARGES
-        if (Input.GetKeyDown(KeyCode.Alpha3) && Input.GetKey(KeyCode.LeftShift))
+        if (Input.GetKeyDown(KeyCode.Alpha3) && Input.GetKey(KeyCode.LeftShift) && stealthCharged > 0)
         {
-            if (stealthCharged > 0)
-            {
-                Debug.Log("stealth--");
-                batCharged++;
-                stealthCharged--;
-            }
-
+            batCharged++;
+            stealthCharged--;
+            DisplayStealthCharges();
         }
-        else if(Input.GetKeyDown(KeyCode.Alpha3))
+        else if(Input.GetKeyDown(KeyCode.Alpha3) && batCharged > 0 && stealthCharged < stealthCap)
         {
-            if (batCharged > 0 && stealthCharged < stealthCap)
-            {
-                Debug.Log("stealth++");
-                batCharged--;
-                stealthCharged++;
-            }
-          
-
+            //Debug.Log("stealth++");
+            batCharged--;
+            stealthCharged++;
+            DisplayStealthCharges();
         }
 
-        DisplayBatteryCharges();
-        DisplayTurboCharges();
-        DisplayShieldCharges();
-        DisplayStealthCharges();
+
+        
     }
 
 
 
 
 
-    void DisplayBattery(bool show)
+    void DisplayBatteryPanel(bool show)
     {
         batteryPanel.SetActive(show);
     }
@@ -167,6 +155,8 @@ public class PowerManager : MonoBehaviour
 
     void DisplayTurboCharges()
     {
+        DisplayBatteryCharges();
+
         for (int i = 0; i < turboChargesImg.Length; i++)
         {
             if (i < turboCharged)
@@ -187,6 +177,8 @@ public class PowerManager : MonoBehaviour
 
     void DisplayShieldCharges()
     {
+        DisplayBatteryCharges();
+
         for (int i = 0; i < shieldChargesImg.Length; i++)
         {
             if (i < shieldCharged)
@@ -207,6 +199,8 @@ public class PowerManager : MonoBehaviour
 
     void DisplayStealthCharges()
     {
+        DisplayBatteryCharges();
+
         for (int i = 0; i < stealthChargesImg.Length; i++)
         {
             if (i < stealthCharged)

@@ -51,6 +51,10 @@ public class BoosterTurbov2 : MonoBehaviour
         slider.SetSliderMaxValue(turboLength);
     }
     
+    public void SetLevel1Params()
+    {
+
+    }
 
     void Booster()
     {
