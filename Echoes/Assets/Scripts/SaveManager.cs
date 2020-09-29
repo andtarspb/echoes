@@ -17,12 +17,22 @@ public class SaveManager : MonoBehaviour
 
     public bool gamePlayed;                 // играли ли в игру
 
+    [SerializeField]
+    GameObject startPosition;
+    [SerializeField]
+    GameObject escapePosition;                 // позиция игрока при рестарте после победы над боссом
+
     void Awake()
     {
         startFromBeginning = CheckStartFromBegining();
 
         if (startFromBeginning) //  new game
         {
+            if (startPosition != null)
+            {
+                startPos = startPosition.transform.position;
+            }            
+
             // to place the player in the beginning
             SetCheckpointPos(startPos);
             //PlayerPrefs.SetFloat("lastCheckpointPosX", startPos.x);
@@ -40,7 +50,8 @@ public class SaveManager : MonoBehaviour
             SetStartFromBegining(0);
 
             // didn't show any messages
-            SetMessageID(0);            
+            SetMessageID(0);
+            
         }
 
         // place the player at he last checkpoint
@@ -52,9 +63,16 @@ public class SaveManager : MonoBehaviour
         if (CheckBossBattleWon())
         {
             // position the player above boss to start escaping
-            lastChackpointPos.x = 255.75f;
-            lastChackpointPos.y = -207;
-            lastChackpointPos.z = 0;
+
+            //lastChackpointPos.x = 255.75f;
+            //lastChackpointPos.y = -207;
+            //lastChackpointPos.z = 0;
+
+            if (escapePosition != null)
+            {
+                lastChackpointPos = escapePosition.transform.position;
+            }
+            
         }
             
 

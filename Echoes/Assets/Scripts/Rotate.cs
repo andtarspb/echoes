@@ -27,7 +27,7 @@ public class Rotate : MonoBehaviour
     public LayerMask emitterMask;   // маска эмиттеров
     public LayerMask generatorMask;   // маска эмиттеров
 
-
+    Vector3 upVec;
     Vector3 endCoord;               // cordinates of the end of the ray when hitting obstacles
     LineRenderer rayLineRenderer;
 
@@ -61,7 +61,7 @@ public class Rotate : MonoBehaviour
     }
 
     // Update is called once per frame
-    void LateUpdate()
+    void Update()
     {
         //if (Input.GetKeyDown(KeyCode.R))    // change rotation direction
         //{
@@ -77,10 +77,15 @@ public class Rotate : MonoBehaviour
             transform.Rotate(0.0f, 0.0f, -rotationDegree * Time.deltaTime);
 
         // crate vector that we will allign our ray to
-        Vector3 upVec = transform.TransformDirection(Vector3.up);
+        upVec = transform.TransformDirection(Vector3.up);
         endCoord = HandleObstacleBlink(upVec);
         DetectObjects(upVec);  // cast ray    
 
+       
+    }
+
+    void LateUpdate()
+    {
         // draw the ray
         DrawRay(endCoord, transform.position + upVec * rayLength);
     }
