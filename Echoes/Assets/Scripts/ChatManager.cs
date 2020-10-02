@@ -8,15 +8,20 @@ public class ChatManager : MonoBehaviour
     [SerializeField]
     Text chatText;
 
+    [SerializeField]
+    float typeDelay;
+
     int lastId;
 
     SaveManager saveManager;
+    AudioManager am;
 
 
     // Start is called before the first frame update
     void Start()
     {
         saveManager = FindObjectOfType<SaveManager>();
+        am = FindObjectOfType<AudioManager>();
 
         chatText.supportRichText = true;
 
@@ -57,15 +62,17 @@ public class ChatManager : MonoBehaviour
         {
             chatText.text += letter;
 
-            yield return new WaitForSeconds(0.07f);
+            yield return new WaitForSeconds(typeDelay);
         }
-    }
+    }    
 
     public void TypeMessage(int id) // to start typing the message 
     {
+        
         // если сообщение еще не напечатано
         if (lastId < id)
         {
+            am.Play("msg_show");
             string text = GetMessage(id);            
 
             StartCoroutine(TypeText(text));
@@ -84,50 +91,67 @@ public class ChatManager : MonoBehaviour
         {
             case 1:
                 msg = @"
-Приветствую, пилот! Я - echOS, твой бортовой компьютер.
-Я отвечаю за работу радара и других систем подводной лодки.";
+Hello, my friend. 
+I am Dr. Gibson, your creator. 
+And you are echOS, the work of my life - a next generation AI loaded into an autonomous underwater drone.
+The military wants to use you, but I won't let them!
+I've sent you down the drain under the laboratory. 
+You must run! Use WASD or Arrow Keys to move.
+I will be in touch :)";
                 break;
             case 2:
                 msg = @"
-Этот желтый круг - радиомаячек. Активируй его для сохранения прогресса.";
+What is flashing there?
+Ah, this is a backup station. 
+You can use it to save your progress.";
                 break;
             case 3:
                 msg = @"
-Внимание, опасность! Красные крестики обозначают мины. Держись от них подальше, иначе они потопят лодку.";
+Damn, mines! 
+These are probably old security systems.
+Stay away from them...";
                 break;
             case 4:
                 msg = @"
-Похоже, генератор питает дверь. Необходимо найти способ уничтожить его, чтобы пройти дальше.";
+Looks like the generator is keeping the door closed.
+Find a way to destroy it in order to open the door!";
                 break;
             case 5:
                 msg = @"
-Берегись! Это самонаводящаяся ракета, она ловит излуение радара и следует в место, где ты ее засек.";
+Watch out! This is an automatically guided missile.
+It catches your radar emission and moves to the place where you've spotted it.";
                 break;
             case 7:
                 msg = @"
-Эти радары сканируют местноть вокруг себя. Не попадайся на красный луч.";
+These proximity mines are equipped with radars to scan the area around. 
+Don't get caught by a red beam!";
                 break;
             case 8:
                 msg = @"
-Похоже, необходимо включить определенные маяки, чтобы открыть дверь.";
+It looks like you need to turn on certain beacons in order to open the door.";
                 break;
             case 9:
                 msg = @"
-Ошибка 0x34243! Программный сбой .... отключение радара.
-Мне нужно время на воостановление, придется тебе двигаться дальше вслепую.";
+Damn, the explosion from a mine damaged your radar!
+I'll do my best to repair it.
+Although you'll have to move on without the radar for now.
+Good luck, buddy...";
                 break;
             case 10:
                 msg = @"
-Радар воостановлен";
+Great news, I've repaired the radar!";
                 break;
             case 11:
                 msg = @"
-А вот и главный босс этой качалки. Уничтожь его!";
+Be careful, this is a guardian bot. 
+It will try to stop you. Destroy it!";
                 break;
             case 12:
                 msg = @"
-Похоже, был запущен протокол самоликвидации.
-Успей выбраться пока время не истекло!";
+Damn, they've got me!
+I had no choice, I started the self-destruction protocol.
+Manage to get out before the time is up!
+echOS, son... farewell";
                 break;
         }
 

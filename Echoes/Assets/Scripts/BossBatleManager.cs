@@ -271,7 +271,7 @@ public class BossBatleManager : MonoBehaviour
         // активируем радар 0 
         ActivateRadarWithRotation(0, -90);
 
-        chatManager.TypeMessage(11);
+        chatManager.TypeMessage(11);        
         
         // засекаем время
         slider.SetSliderMaxValue(phaseOneTime);

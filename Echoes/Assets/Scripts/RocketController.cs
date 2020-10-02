@@ -26,7 +26,7 @@ public class RocketController : EnemyController
         am = FindObjectOfType<AudioManager>();
 
         // если это ракета босса
-        if (transform.position.y > -229)
+        if (transform.position.y > -281)
             MakeSound();
     }
 

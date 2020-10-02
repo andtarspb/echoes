@@ -19,7 +19,7 @@ public class MessageTrigger : MonoBehaviour
 
     public void CallMessage()
     {
-        am.Play("msg_show");
+        //am.Play("msg_show");
         chatMng.TypeMessage(messageId);
     }
 
