@@ -28,6 +28,7 @@ TagManager:
   - game_finish
   - msg_trigger
   - emitter
+  - magnet
   layers:
   - Default
   - TransparentFX

@@ -135,10 +135,10 @@ public class PlayerController : MonoBehaviour
             radarRay.SetActive(isRadarOn);
         }
 
-        if (Input.GetKeyDown(KeyCode.N))
-        {
-            menuManager.LevelCompleted();
-        }
+        //if (Input.GetKeyDown(KeyCode.N))
+        //{
+        //    menuManager.LevelCompleted();
+        //}
 
         // проверка трясущейся камеры: слабое и сильное трясение
         if (Input.GetKeyDown(KeyCode.Z))    
