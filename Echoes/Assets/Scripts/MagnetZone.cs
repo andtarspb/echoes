@@ -5,8 +5,19 @@ using UnityEngine;
 public class MagnetZone : MonoBehaviour
 {
     public int segments;
-    public float radius;
+    float radius;
     LineRenderer line;
+
+
+    public bool attract;
+
+    [SerializeField]
+    float maxRad;
+    [SerializeField]
+    float minRad;
+    bool radShrink;
+    [SerializeField]
+    float animSpeed;
 
     // Start is called before the first frame update
     void Start()
@@ -16,19 +27,36 @@ public class MagnetZone : MonoBehaviour
         line.SetVertexCount(segments + 1);
         line.useWorldSpace = false;
         //CreatePoints();
+
+        radius = maxRad;
+        radShrink = true;
     }
 
     void Update()
     {
         if (Input.GetKey(KeyCode.M))
         {
+            ChangeRad();
+
             CreatePoints(radius);
-            ActivateMagnet();
+            //ActivateMagnet();
+            attract = true;
         }
         if (Input.GetKeyUp(KeyCode.M))
         {
+            attract = false;
             //Debug.Log("deactivate circle");
             CreatePoints(0);
+
+
+        }
+    }
+
+    void LateUpdate()
+    {
+        if (attract)
+        {
+            ActivateMagnet();
         }
     }
 
@@ -69,6 +97,26 @@ public class MagnetZone : MonoBehaviour
             line.SetPosition(i, new Vector3(x, y, z));
 
             angle += (360f / segments);
+        }
+    }
+
+    void ChangeRad()
+    {        
+        if (radShrink)
+        {
+            radius -= animSpeed * Time.deltaTime;
+            if (radius <= minRad)
+            {
+                radShrink = !radShrink;
+            }
+        }
+        else
+        {
+            radius += animSpeed * Time.deltaTime;
+            if (radius >= maxRad)
+            {
+                radShrink = !radShrink;
+            }
         }
     }
 }

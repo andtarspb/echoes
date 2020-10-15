@@ -282,10 +282,10 @@ public class MenuManager : MonoBehaviour
             NewGame();   
         }
 #if (UNITY_EDITOR)
-        if (Input.GetKeyDown(KeyCode.I))
-        {
-            StartCoroutine(DisplayInfo());
-        }
+        //if (Input.GetKeyDown(KeyCode.I))
+        //{
+        //    StartCoroutine(DisplayInfo());
+        //}
 #endif
     }
 }
