@@ -46,6 +46,9 @@ public class Rotate : MonoBehaviour
     public bool turboOn;
     public float radarBoost;
 
+    // to deal with invisibility
+    public bool invisible;
+
     void Start()
     {
         mm = FindObjectOfType<MenuManager>();
@@ -263,8 +266,11 @@ public class Rotate : MonoBehaviour
                 // активируем ракету и передаем ей позицию игрока во время детектирования
                 if (chasePlayer)
                 {
-                    Vector3 targetPosition = transform.position;
-                    hit.collider.gameObject.GetComponent<EnemyController>().ChaseToPosition(targetPosition);
+                    if (!invisible)
+                    {
+                        Vector3 targetPosition = transform.position;
+                        hit.collider.gameObject.GetComponent<EnemyController>().ChaseToPosition(targetPosition);
+                    }                   
                 }
             }
         }
