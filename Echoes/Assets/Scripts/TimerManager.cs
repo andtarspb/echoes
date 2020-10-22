@@ -72,7 +72,7 @@ public class TimerManager : MonoBehaviour
         timerText.text = "00:00";
         timer = 0.0f;
 
-        thePlayer.DestroyPlayer();
+        thePlayer.DestroyPlayer(100, true);
     }
 
     void DisplayTime()

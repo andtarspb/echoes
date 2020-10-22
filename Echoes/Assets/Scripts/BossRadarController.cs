@@ -115,7 +115,7 @@ public class BossRadarController : MonoBehaviour
 
             if (!Physics.Raycast(transform.position, upVec, dstToTarget, obstacleMask) && (dstToTarget <= rayLength))
             {
-                thePlayer.DestroyPlayer();
+                thePlayer.DestroyPlayer(15, false);
             }
         }
     }

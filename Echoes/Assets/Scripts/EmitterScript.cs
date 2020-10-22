@@ -106,7 +106,7 @@ public class EmitterScript : MonoBehaviour
                 && !Physics.Raycast(transform.position, vector, dstToTarget, obstacleMask)) // Если на пути нет обломков
             {
                 //Debug.Log(gameObject.name + " killed the player!");
-                if(thePlayer.DestroyPlayer());
+                if(thePlayer.DestroyPlayer(20 * Time.deltaTime, false));
                 SetRedBlinkPosition(hitInfo2.point);
                 return hitInfo2.point;
 

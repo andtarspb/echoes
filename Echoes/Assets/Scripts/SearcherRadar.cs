@@ -121,7 +121,7 @@ public class SearcherRadar : MonoBehaviour
                 // поисковик засек игрока
                 //Debug.Log("Player spottet");
 
-                if (thePlayer.DestroyPlayer()) // if player not in the safe zone - destroy him and searcher
+                if (thePlayer.DestroyPlayer(1, false)) // if player not in the safe zone - destroy him and searcher
                     DestroySelf();
 
                 
@@ -190,6 +190,21 @@ public class SearcherRadar : MonoBehaviour
         RaycastHit hitInfo;
         RaycastHit hitInfo2;
 
+        // check player hit
+        if (Physics.Raycast(transform.position, upVec, out hitInfo2, rayLength, playerMask))
+        {
+            float dstToTarget = Vector3.Distance(transform.position, hitInfo2.point);
+
+            if (!Physics.Raycast(transform.position, upVec, dstToTarget, sunkenMask)
+                && !Physics.Raycast(transform.position, upVec, dstToTarget, obstacleMask)) // Если на пути нет обломков
+            {
+                //Debug.Log(gameObject.name + " killed the player!");
+                thePlayer.DestroyPlayer(30 * Time.deltaTime, false);
+
+                return hitInfo2.point;
+            }
+        }
+
         float distanceBetweenBlinks = 0.5f;
         if (Physics.Raycast(transform.position, upVec, out hitInfo, rayLength, obstacleMask))
         {
@@ -234,20 +249,7 @@ public class SearcherRadar : MonoBehaviour
             }
         }
 
-        // check player hit
-        if (Physics.Raycast(transform.position, upVec, out hitInfo2, rayLength, playerMask))
-        {
-            float dstToTarget = Vector3.Distance(transform.position, hitInfo2.point);
-
-            if (!Physics.Raycast(transform.position, upVec, dstToTarget, sunkenMask)
-                && !Physics.Raycast(transform.position, upVec, dstToTarget, obstacleMask)) // Если на пути нет обломков
-            {
-                //Debug.Log(gameObject.name + " killed the player!");
-                thePlayer.DestroyPlayer();
-
-                //return hitInfo2.point;
-            }
-        }
+        
 
         //if (Physics.Raycast(transform.position, upVec, out hitInfo2, rayLength, rayStopMask))
         //{

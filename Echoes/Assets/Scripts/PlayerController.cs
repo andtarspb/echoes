@@ -40,6 +40,8 @@ public class PlayerController : MonoBehaviour
     // turbo booster
     public float booster = 1f;
     public bool turboOn;
+    public bool shieldOn;
+    BoosterShieldV2 shield;
 
     void Start()
     {
@@ -55,6 +57,8 @@ public class PlayerController : MonoBehaviour
         blinkManager = FindObjectOfType<BlinkManager>();
         audioManager = FindObjectOfType<AudioManager>();
         timerManager = FindObjectOfType<TimerManager>();
+
+        shield = GetComponent<BoosterShieldV2>();
 
         direction = Vector3.up;
 
@@ -213,7 +217,7 @@ public class PlayerController : MonoBehaviour
         {
             other.gameObject.GetComponent<EnemyController>().BlowUpEnemy(false);
             
-            DestroyPlayer();
+            DestroyPlayer(11, false);
         }
 
         if (other.tag == "safe_zone")
@@ -259,12 +263,12 @@ public class PlayerController : MonoBehaviour
             audioManager.Play("laser_on");
             FindObjectOfType<TunnelEmittersManager>().ActivateEmitters();
         }
-        if (other.tag == "tunnel_stop")
-        {
-            other.gameObject.SetActive(false);
-            audioManager.Play("radar_off");
-            FindObjectOfType<TunnelEmittersManager>().DeactivateEmitters();
-        }
+        //if (other.tag == "tunnel_stop")
+        //{
+        //    other.gameObject.SetActive(false);
+        //    audioManager.Play("radar_off");
+        //    FindObjectOfType<TunnelEmittersManager>().DeactivateEmitters();
+        //}
 
         // finish the game
         if (other.tag == "game_finish")
@@ -282,9 +286,9 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    public bool DestroyPlayer()
+    public bool DestroyPlayer(float dmg, bool ignoreShield)
     {
-        if (!inSafeZone)    // if player not in the safe zone - destroy him
+        if ((!inSafeZone && !shieldOn) ||    ignoreShield)    // if player not in the safe zone or not under the shield - destroy him
         {
             camShake.Shake();
             timerManager.StopTimer();
@@ -305,6 +309,10 @@ public class PlayerController : MonoBehaviour
             menuManager.PlayerDead();
 
             return true;
+        }
+        else
+        {
+            shield.TakeDamage(dmg);
         }
 
         return false;
