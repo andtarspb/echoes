@@ -39,6 +39,9 @@ public class BoosterShieldV2 : MonoBehaviour
     float radius;
     LineRenderer line;
 
+    // power manager interactions
+    public int powerLevel;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -62,12 +65,17 @@ public class BoosterShieldV2 : MonoBehaviour
     {
         slider.SetSliderValue(currentSP);
 
-        if (Input.GetKeyDown(KeyCode.K))
+        if (Input.GetKeyDown(KeyCode.K) && powerLevel > 0)
         {
             if (shieldAviable)
             {
                 ActivateShield();
             }
+        }
+
+        if (powerLevel == 0)
+        {
+            DeactivateShield();
         }
 
         // start shiled recovery

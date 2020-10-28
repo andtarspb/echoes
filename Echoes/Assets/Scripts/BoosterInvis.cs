@@ -37,6 +37,8 @@ public class BoosterInvis : MonoBehaviour
     BossBarScript slider;
     bool startCountDown;    // when bar value is changes
 
+    // power manager interactions
+    public int powerLevel;
 
     // Start is called before the first frame update
     void Start()
@@ -64,10 +66,15 @@ public class BoosterInvis : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.J))
         {
-            if (enableInvis)
+            if (enableInvis && powerLevel > 0)
             {
                 invisOn = true;
             }
+        }
+
+        if (powerLevel == 0)
+        {
+            invisOn = false;
         }
 
         ActivateInvis();

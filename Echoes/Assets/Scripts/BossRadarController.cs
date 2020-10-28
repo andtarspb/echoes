@@ -115,7 +115,7 @@ public class BossRadarController : MonoBehaviour
 
             if (!Physics.Raycast(transform.position, upVec, dstToTarget, obstacleMask) && (dstToTarget <= rayLength))
             {
-                thePlayer.DestroyPlayer(15, false);
+                thePlayer.DestroyPlayer(30 * Time.deltaTime, false);
             }
         }
     }
@@ -138,9 +138,9 @@ public class BossRadarController : MonoBehaviour
 
             if (!Physics.Raycast(transform.position, upVec, dstToTarget, obstacleMask) && (dstToTarget <= rayLength))
             {
-                bossManager.LaunchNewRocket();
-
-                hitInfo.collider.gameObject.GetComponent<RocketController>().BlowUpEnemy(true);
+                //bossManager.LaunchNewRocket();
+                hitInfo.collider.gameObject.GetComponent<RocketBoss>().LaunchNewRocket();
+                hitInfo.collider.gameObject.GetComponent<RocketController>().BlowUpEnemy(true, false);
             }
         }
     }
@@ -154,7 +154,7 @@ public class BossRadarController : MonoBehaviour
 
             if (!Physics.Raycast(transform.position, upVec, dstToTarget, obstacleMask) && (dstToTarget <= rayLength))
             {
-                bossManager.LaunchNewRocket();
+                //bossManager.LaunchNewRocket();
                 //DestroySelf();
             }
         }

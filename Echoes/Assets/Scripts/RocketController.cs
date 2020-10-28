@@ -16,6 +16,9 @@ public class RocketController : EnemyController
     public bool detected1;             // засекли мину ракету первый раз
     bool detected;
 
+    [SerializeField]
+    public GameObject praxis;
+
     AudioManager am;
 
     new void Start()
@@ -100,17 +103,17 @@ public class RocketController : EnemyController
         }
         else if (other.tag == "mine" )//|| other.tag == "mine_boss")
         {
-            BlowUpEnemy(true);
-            other.gameObject.GetComponent<EnemyController>().BlowUpEnemy(false);
+            BlowUpEnemy(true, true);
+            other.gameObject.GetComponent<EnemyController>().BlowUpEnemy(false, false);
         }
         else if (other.tag == "rocket")
         {
-            BlowUpEnemy(true);
+            BlowUpEnemy(true, true);
         }
         else if (other.tag == "generator")
         {
             other.GetComponent<GeneratorController>().DestroyGenerator();
-            BlowUpEnemy(false);
+            BlowUpEnemy(false, true);
         }
 
         //lvlManager.ResetArrays();

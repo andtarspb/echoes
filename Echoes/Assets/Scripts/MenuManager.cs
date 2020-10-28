@@ -12,6 +12,8 @@ public class MenuManager : MonoBehaviour
     public GameObject endMenu;
     public GameObject LoadingScreen;
     public GameObject SavingText;
+    public GameObject PraxisTakenText;
+    public GameObject skillMenu;
 
     public Animator animator;
 
@@ -40,12 +42,14 @@ public class MenuManager : MonoBehaviour
     //RocketController[] rockets;
     //Vector3[] rocketsVelocity;
 
+    SkillMenuScript skillManager;
 
     // Start is called before the first frame update
     void Start()
     {
         curLevel = SceneManager.GetActiveScene().name;
         thePlayer = FindObjectOfType<PlayerController>();
+        skillManager = FindObjectOfType<SkillMenuScript>();
 
         //enemies = FindObjectsOfType<EnemyController>();
         //enemiesVelocity = new Vector3[enemies.Length];
@@ -100,11 +104,29 @@ public class MenuManager : MonoBehaviour
 
     }
 
+    public void DisplayPraxisTaken(bool show)
+    {
+        PraxisTakenText.SetActive(show);
+
+        if (show)
+        {
+            StartCoroutine(DeactivatePraxisTakenText(1.5f));
+        }
+
+    }
+
     IEnumerator DeactivateSavingText(float time)
     {
         yield return new WaitForSeconds(time);
 
         DisplaySaving(false);
+    }
+
+    IEnumerator DeactivatePraxisTakenText(float time)
+    {
+        yield return new WaitForSeconds(time);
+
+        DisplayPraxisTaken(false);
     }
 
     public void NewGame()
@@ -128,7 +150,7 @@ public class MenuManager : MonoBehaviour
     {
         isPaused = false;
         pauseMenu.SetActive(false);
-        infoMenu.SetActive(false);
+        skillMenu.SetActive(false);
         Time.timeScale = 1f;
 
         SetKinObjects(false);
@@ -161,8 +183,28 @@ public class MenuManager : MonoBehaviour
             SetKinObjects(true);
 
             pauseMenu.SetActive(true);
+            skillMenu.SetActive(false);
+
             Time.timeScale = 0f;
         }
+    }
+
+    public void OpenSkillMenu()
+    {
+        if (!isPaused)
+        {
+            //skillMenu.GetComponent<SkillMenuScript>().DisplayInfo();
+            //skillMenu.GetComponent<SkillMenuScript>().DisplayPraxisInfo();
+            skillManager.DisplayInfo();
+            skillManager.DisplayPraxisInfo();
+
+            isPaused = true;
+            SetKinObjects(true);
+
+            skillMenu.SetActive(true);
+            Time.timeScale = 0f;
+        }
+        
     }
 
     public void PlayerDead()
@@ -281,11 +323,12 @@ public class MenuManager : MonoBehaviour
         {
             NewGame();   
         }
-#if (UNITY_EDITOR)
-        //if (Input.GetKeyDown(KeyCode.I))
-        //{
-        //    StartCoroutine(DisplayInfo());
-        //}
-#endif
+
+        if (Input.GetKeyDown(KeyCode.I))
+        {
+            //StartCoroutine(DisplayInfo());
+            OpenSkillMenu();
+        }
+
     }
 }

@@ -321,6 +321,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 524288
   explosionForce: 200
+  praxis: {fileID: 1494654924720184855, guid: 29c3ea79036718d4bb222bc7f87f9668, type: 3}
 --- !u!120 &3758190759357735867
 LineRenderer:
   m_ObjectHideFlags: 0

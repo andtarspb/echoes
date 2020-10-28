@@ -140,7 +140,7 @@ public class EmitterScript : MonoBehaviour
                 && !Physics.Raycast(transform.position, vector, dstToTarget, obstacleMask)) // Если на пути нет обломков
             {
                 //Debug.Log(gameObject.name + " killed the player!");
-                hitInfo2.collider.gameObject.GetComponent<RocketController>().BlowUpEnemy(true);
+                hitInfo2.collider.gameObject.GetComponent<RocketController>().BlowUpEnemy(true, true);
 
                 if (GetComponent<EmitterToSpawner>())
                 {

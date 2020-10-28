@@ -35,6 +35,9 @@ public class SearcherRadar : MonoBehaviour
     PlayerController thePlayer;
     CameraShake camShake;
 
+    [SerializeField]
+    GameObject praxis;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -131,6 +134,8 @@ public class SearcherRadar : MonoBehaviour
 
     void DestroySelf()
     {
+        Instantiate(praxis, transform.position, Quaternion.identity);
+
         CreateExplosion(rayLength);
 
         transform.parent.gameObject.SetActive(false);
@@ -153,7 +158,7 @@ public class SearcherRadar : MonoBehaviour
 
                 DestroySelf();
 
-                hitInfo.collider.gameObject.GetComponent<RocketController>().BlowUpEnemy(true);
+                hitInfo.collider.gameObject.GetComponent<RocketController>().BlowUpEnemy(true, true);
             }
         }
     }

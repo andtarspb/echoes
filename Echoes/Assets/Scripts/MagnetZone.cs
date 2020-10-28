@@ -8,7 +8,6 @@ public class MagnetZone : MonoBehaviour
     float radius;
     LineRenderer line;
 
-
     public bool attract;
 
     [SerializeField]
@@ -18,6 +17,25 @@ public class MagnetZone : MonoBehaviour
     bool radShrink;
     [SerializeField]
     float animSpeed;
+
+    public bool magnetAviable;
+
+    [SerializeField]
+    float attractionLength;
+    [SerializeField]
+    float attractionRecovery;
+    float recoveryRatio;
+    [SerializeField]
+    float timeBeforeRecovery;   // how long wait before recovery starts
+    float recoveryTime;         // time when recovery starts
+
+    float secondsPressed;
+
+    [SerializeField]
+    BossBarScript slider;
+
+    // power manager interactions
+    public int powerLevel;
 
     // Start is called before the first frame update
     void Start()
@@ -30,25 +48,74 @@ public class MagnetZone : MonoBehaviour
 
         radius = maxRad;
         radShrink = true;
+
+        magnetAviable = true;
+
+        slider.SetSliderMaxValue(attractionLength);
+
+        recoveryRatio = attractionRecovery / attractionLength;
     }
 
     void Update()
     {
-        if (Input.GetKey(KeyCode.M))
+        slider.SetSliderValue(attractionLength - secondsPressed);
+
+        //if (magnetAviable)
+        //{
+        if (Input.GetKey(KeyCode.M) && magnetAviable && powerLevel > 0)
         {
             ChangeRad();
 
             CreatePoints(radius);
             //ActivateMagnet();
             attract = true;
+
+            secondsPressed += Time.deltaTime;
+            if (secondsPressed >= attractionLength)
+            {
+                magnetAviable = false;
+                attract = false;
+                CreatePoints(0);
+
+                secondsPressed = attractionLength;
+
+                //recoveryTime = Time.time + timeBeforeRecovery;
+            }
+
+            recoveryTime = Time.time + timeBeforeRecovery;
+
         }
-        if (Input.GetKeyUp(KeyCode.M))
+        else
         {
-            attract = false;
-            //Debug.Log("deactivate circle");
-            CreatePoints(0);
+            if (Input.GetKeyUp(KeyCode.M))
+            {
+                RecoverMagnet();
+            }
+            if (secondsPressed <= attractionLength)
+            {
+                RecoverMagnet();
+            }
+        } 
 
+       
 
+    }
+
+    void RecoverMagnet()
+    {
+        attract = false;
+        //Debug.Log("deactivate circle");
+        CreatePoints(0);
+
+        if (Time.time >= recoveryTime)
+        {
+            //magnetAviable = true;
+            if (secondsPressed > 0)
+            {
+                secondsPressed -= Time.deltaTime / recoveryRatio;
+                
+                magnetAviable = true;
+            }
         }
     }
 

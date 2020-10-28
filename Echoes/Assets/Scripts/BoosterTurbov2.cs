@@ -34,7 +34,10 @@ public class BoosterTurbov2 : MonoBehaviour
     BossBarScript slider;
     bool startCountDown;    // when bar value is changes
 
-    
+
+    // power manager interactions
+    public int powerLevel;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -109,7 +112,7 @@ public class BoosterTurbov2 : MonoBehaviour
         }
 
 
-        if (Input.GetKey(KeyCode.Space))    
+        if (Input.GetKey(KeyCode.Space) && powerLevel > 0)    
         {
             if (enableTurbo)
             {
@@ -119,7 +122,15 @@ public class BoosterTurbov2 : MonoBehaviour
         else if (Input.GetKeyUp(KeyCode.Space))
         {
             turboOn = false;
-            recoveryTime = Time.time + timeBeforeRecovery;
+            if (powerLevel > 0)
+            {
+                recoveryTime = Time.time + timeBeforeRecovery;
+            }
+           
+        }
+        else if (powerLevel == 0)
+        {
+            turboOn = false;
         }
     }
 }

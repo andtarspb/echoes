@@ -18,6 +18,9 @@ public class PowerManager : MonoBehaviour
     int stealthCap;                 // number of batteries for stealth
     int stealthCharged;             // number of charged batteries for stealth
 
+    int magnetCap;                  // number of batteries for magnet
+    int magnetCharged;              // number of charged batteries for magnet
+
     [SerializeField]
     Sprite fullCharge;              // image of a full charge
     [SerializeField]
@@ -29,22 +32,29 @@ public class PowerManager : MonoBehaviour
     Image[] batteryChargesImg;      // images of battery charges
     
     [SerializeField]
-    GameObject turboPanel;          // whole turbo panel
+    GameObject turboPanel;          // whole turbo panel [1]
     [SerializeField]
     Image[] turboChargesImg;        // images of turbo battery charges
 
     [SerializeField]
-    GameObject shieldPanel;         // whole shield panel
+    GameObject shieldPanel;         // whole shield panel [2]
     [SerializeField]
     Image[] shieldChargesImg;       // images of shield battery charges
 
     [SerializeField]
-    GameObject stealthPanel;        // whole stealth panel
+    GameObject stealthPanel;        // whole stealth panel [3]
     [SerializeField]
     Image[] stealthChargesImg;      // images of stealth battery charges
 
+    [SerializeField]
+    GameObject magnetPanel;        // whole magnet panel [4]
+    [SerializeField]
+    Image[] magnetChargesImg;      // images of magnet battery charges
 
     BoosterTurbov2 turboBooster;    // reference to turbo booster
+    BoosterShieldV2 shieldBooster;
+    BoosterInvis invisBooster;
+    MagnetZone magnetBooster;
 
     // Start is called before the first frame update
     void Start()
@@ -61,13 +71,23 @@ public class PowerManager : MonoBehaviour
         shieldCharged = 0;
 
         // setting stealth parameters
-        stealthCap = 2;
+        stealthCap = 1;
         stealthCharged = 0;
+
+        // setting stealth parameters
+        magnetCap = 1;
+        magnetCharged = 0;
 
         // display charges
         DisplayTurboCharges();
         DisplayShieldCharges();
         DisplayStealthCharges();
+        DisplayMagnetCharges();
+
+        turboBooster = FindObjectOfType<BoosterTurbov2>();
+        shieldBooster = FindObjectOfType<BoosterShieldV2>();
+        invisBooster = FindObjectOfType<BoosterInvis>();
+        magnetBooster = FindObjectOfType<MagnetZone>();
     }
 
     // Update is called once per frame
@@ -79,6 +99,7 @@ public class PowerManager : MonoBehaviour
             //Debug.Log("turbo--");
             batCharged++;
             turboCharged--;
+            turboBooster.powerLevel = turboCharged;
             DisplayTurboCharges();
         }
         else if (Input.GetKeyDown(KeyCode.Alpha1) && batCharged > 0 && turboCharged < turboCap)
@@ -86,6 +107,7 @@ public class PowerManager : MonoBehaviour
             //Debug.Log("turbo++");
             batCharged--;
             turboCharged++;
+            turboBooster.powerLevel = turboCharged;
             DisplayTurboCharges();
         }
 
@@ -95,6 +117,7 @@ public class PowerManager : MonoBehaviour
             //Debug.Log("shield--");
             batCharged++;
             shieldCharged--;
+            shieldBooster.powerLevel = shieldCharged;
             DisplayShieldCharges();
         }
         else if(Input.GetKeyDown(KeyCode.Alpha2) && batCharged > 0 && shieldCharged < shieldCap)
@@ -102,6 +125,7 @@ public class PowerManager : MonoBehaviour
             //Debug.Log("shield++");
             batCharged--;
             shieldCharged++;
+            shieldBooster.powerLevel = shieldCharged;
             DisplayShieldCharges();
         }
 
@@ -110,6 +134,7 @@ public class PowerManager : MonoBehaviour
         {
             batCharged++;
             stealthCharged--;
+            invisBooster.powerLevel = stealthCharged;
             DisplayStealthCharges();
         }
         else if(Input.GetKeyDown(KeyCode.Alpha3) && batCharged > 0 && stealthCharged < stealthCap)
@@ -117,21 +142,165 @@ public class PowerManager : MonoBehaviour
             //Debug.Log("stealth++");
             batCharged--;
             stealthCharged++;
+            invisBooster.powerLevel = stealthCharged;
             DisplayStealthCharges();
         }
 
+        // DISPLAY MAGNET CHARGES
+        if (Input.GetKeyDown(KeyCode.Alpha4) && Input.GetKey(KeyCode.LeftShift) && magnetCharged > 0)
+        {
+            batCharged++;
+            magnetCharged--;
+            magnetBooster.powerLevel = magnetCharged;
+            DisplayMagnetCharges();
+        }
+        else if (Input.GetKeyDown(KeyCode.Alpha4) && batCharged > 0 && magnetCharged < magnetCap)
+        {
+            //Debug.Log("stealth++");
+            batCharged--;
+            magnetCharged++;
+            magnetBooster.powerLevel = magnetCharged;
+            DisplayMagnetCharges();
+        }
 
-        
     }
 
+    public void SetBatCap0()
+    {
+        SetBatCap(0);
+    }
 
+    public void SetBatCap1()
+    {
+        SetBatCap(1);
+    }
 
+    public void SetBatCap2()
+    {
+        SetBatCap(2);
+    }
+
+    public void SetBatCap3()
+    {
+        SetBatCap(3);
+    }
+
+    void SetBatCap(int capacity)
+    {
+        batCap = capacity;
+        batCharged = batCap;
+        DisplayBatteryCharges();
+
+        //SetTurboCap(turboCap);
+        //SetShieldCap(shieldCap);
+        //SetStealthCap(stealthCap);
+        //SetMagnetCap(magnetCap);
+    }
+
+    public void SetTurboCap0()
+    {
+        SetTurboCap(0);
+    }
+    public void SetTurboCap1()
+    {
+        SetTurboCap(1);
+    }
+    public void SetTurboCap2()
+    {
+        SetTurboCap(2);
+    }
+
+    void SetTurboCap(int capacity)
+    {
+        if (capacity == 0)
+            turboPanel.SetActive(false);
+        else
+            turboPanel.SetActive(true);
+
+        turboCap = capacity;
+        turboCharged = 0;
+        SetBatCap(batCap);
+        DisplayTurboCharges();
+    }
+
+    public void SetShieldCap0()
+    {
+        SetShieldCap(0);
+    }
+
+    public void SetShieldCap1()
+    {
+        SetShieldCap(1);
+    }
+
+    public void SetShieldCap2()
+    {
+        SetShieldCap(2);
+    }
+
+    void SetShieldCap(int capacity)
+    {
+        if (capacity == 0)        
+            shieldPanel.SetActive(false);
+        else
+            shieldPanel.SetActive(true);
+
+        shieldCap = capacity;
+        shieldCharged = 0;
+        SetBatCap(batCap);
+        DisplayShieldCharges();
+    }
+
+    public void SetStealthCap0()
+    {
+        SetStealthCap(0);
+    }
+    public void SetStealthCap1()
+    {
+        SetStealthCap(1);
+    }
+
+    void SetStealthCap(int capacity)
+    {
+        if (capacity == 0)
+            stealthPanel.SetActive(false);
+        else
+            stealthPanel.SetActive(true);
+
+        stealthCap = capacity;
+        stealthCharged = 0;
+        SetBatCap(batCap);
+        DisplayStealthCharges();
+    }
+
+    public void SetMagnetCap0()
+    {
+        SetMagnetCap(0);
+    }
+    public void SetMagnetCap1()
+    {
+        SetMagnetCap(1);
+    }
+
+    void SetMagnetCap(int capacity)
+    {
+        if (capacity == 0)
+            magnetPanel.SetActive(false);
+        else
+            magnetPanel.SetActive(true);
+
+        magnetCap = capacity;
+        magnetCharged = 0;
+        SetBatCap(batCap);
+        DisplayMagnetCharges();
+    }
 
 
     void DisplayBatteryPanel(bool show)
     {
         batteryPanel.SetActive(show);
     }
+
 
     void DisplayBatteryCharges()
     {
@@ -216,6 +385,28 @@ public class PowerManager : MonoBehaviour
                 stealthChargesImg[i].enabled = true;
             else
                 stealthChargesImg[i].enabled = false;
+        }
+    }
+
+    void DisplayMagnetCharges()
+    {
+        DisplayBatteryCharges();
+
+        for (int i = 0; i < magnetChargesImg.Length; i++)
+        {
+            if (i < magnetCharged)
+            {
+                magnetChargesImg[i].sprite = fullCharge;
+            }
+            else
+            {
+                magnetChargesImg[i].sprite = emptyCharge;
+            }
+
+            if (i < magnetCap)
+                magnetChargesImg[i].enabled = true;
+            else
+                magnetChargesImg[i].enabled = false;
         }
     }
 }

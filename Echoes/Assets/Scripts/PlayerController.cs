@@ -36,11 +36,12 @@ public class PlayerController : MonoBehaviour
     float blinkDelay = 0.5f;
 
     public bool inSafeZone;    // if player in safe zone    
-
+    
     // turbo booster
     public float booster = 1f;
     public bool turboOn;
     public bool shieldOn;
+    MagnetZone magnet;
     BoosterShieldV2 shield;
 
     void Start()
@@ -59,6 +60,7 @@ public class PlayerController : MonoBehaviour
         timerManager = FindObjectOfType<TimerManager>();
 
         shield = GetComponent<BoosterShieldV2>();
+        magnet = FindObjectOfType<MagnetZone>();
 
         direction = Vector3.up;
 
@@ -215,7 +217,13 @@ public class PlayerController : MonoBehaviour
 
         if (other.tag == "mine"|| other.tag == "mine_boss" || other.tag == "rocket" || other.tag == "persuer")
         {
-            other.gameObject.GetComponent<EnemyController>().BlowUpEnemy(false);
+            if (other.gameObject.GetComponent<RocketBoss>())
+            {
+                other.gameObject.GetComponent<RocketBoss>().LaunchNewRocket();
+            }
+
+
+            other.gameObject.GetComponent<EnemyController>().BlowUpEnemy(false, false);
             
             DestroyPlayer(11, false);
         }
@@ -303,6 +311,7 @@ public class PlayerController : MonoBehaviour
                 endMark.SetMarker(false, true);
             }
 
+            magnet.magnetAviable = false;
 
             blinkManager.CreateBlink(blinkManager.blinkCircleOrange, transform.position);
             MakeVisible(false);
@@ -310,7 +319,7 @@ public class PlayerController : MonoBehaviour
 
             return true;
         }
-        else
+        else if (!inSafeZone)
         {
             shield.TakeDamage(dmg);
         }

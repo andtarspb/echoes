@@ -36,11 +36,9 @@ public class EnemyController : MonoBehaviour
     float nextTimeChangeDrag;
     float dragChangeDelay = 1;
 
-
     // time to next explosion for sunken
     float explGap = 0.2f;
     float nextExpl;
-
 
     // Start is called before the first frame update
     public void Start()
@@ -164,7 +162,7 @@ public class EnemyController : MonoBehaviour
         }
     }
 
-    public void BlowUpEnemy(bool playSound)
+    public void BlowUpEnemy(bool playSound, bool givePraxis)
     {      
         if (Vector3.Distance(FindObjectOfType<PlayerController>().transform.position, transform.position) < 20)
         {
@@ -187,6 +185,17 @@ public class EnemyController : MonoBehaviour
             GameObject childBlink = gameObject.transform.GetChild(0).gameObject;
             childBlink.transform.parent = null;
             childBlink.transform.position = Vector3.zero;
+        }
+
+        if (gameObject.CompareTag("rocket") && givePraxis)
+        {
+            if (!gameObject.GetComponent<RocketBoss>())
+            {
+                GameObject praxis = gameObject.GetComponent<RocketController>().praxis;
+                Instantiate(praxis, transform.position, Quaternion.identity);
+
+            }
+            
         }
 
         // потом уничтожаем сам объект
@@ -251,7 +260,7 @@ public class EnemyController : MonoBehaviour
         // если обломок сталкивается с другими врагами - взорви их
         if (gameObject.tag == "sunken" && (other.tag == "mine"))//|| other.tag == "rocket" || other.tag == "persuer"))
         {
-            other.gameObject.GetComponent<EnemyController>().BlowUpEnemy(true);
+            other.gameObject.GetComponent<EnemyController>().BlowUpEnemy(true, false);
             lvlManager.ResetArrays();
         }
 
