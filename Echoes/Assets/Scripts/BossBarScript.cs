@@ -18,4 +18,10 @@ public class BossBarScript : MonoBehaviour
         slider.value = maxValue;
     }
 
+    public void SetJustSliderMaxValue(float maxValue, float currentValue)
+    {
+        slider.maxValue = maxValue;
+        slider.value = currentValue;
+    }
+
 }

@@ -225,7 +225,7 @@ public class PlayerController : MonoBehaviour
 
             other.gameObject.GetComponent<EnemyController>().BlowUpEnemy(false, false);
             
-            DestroyPlayer(11, false);
+            DestroyPlayer(11, false, false);
         }
 
         if (other.tag == "safe_zone")
@@ -294,7 +294,7 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    public bool DestroyPlayer(float dmg, bool ignoreShield)
+    public bool DestroyPlayer(float dmg, bool ignoreShield, bool handleInvinsibility)
     {
         if ((!inSafeZone && !shieldOn) ||    ignoreShield)    // if player not in the safe zone or not under the shield - destroy him
         {
@@ -321,7 +321,8 @@ public class PlayerController : MonoBehaviour
         }
         else if (!inSafeZone)
         {
-            shield.TakeDamage(dmg);
+            shield.TakeDamage(dmg, !handleInvinsibility);
+            audioManager.Play("blowup_enemy");
         }
 
         return false;

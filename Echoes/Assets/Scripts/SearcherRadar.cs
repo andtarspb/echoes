@@ -124,7 +124,7 @@ public class SearcherRadar : MonoBehaviour
                 // поисковик засек игрока
                 //Debug.Log("Player spottet");
 
-                if (thePlayer.DestroyPlayer(1, false)) // if player not in the safe zone - destroy him and searcher
+                if (thePlayer.DestroyPlayer(1, false, true)) // if player not in the safe zone - destroy him and searcher
                     DestroySelf();
 
                 
@@ -204,7 +204,9 @@ public class SearcherRadar : MonoBehaviour
                 && !Physics.Raycast(transform.position, upVec, dstToTarget, obstacleMask)) // Если на пути нет обломков
             {
                 //Debug.Log(gameObject.name + " killed the player!");
-                thePlayer.DestroyPlayer(30 * Time.deltaTime, false);
+                //thePlayer.DestroyPlayer(30 * Time.deltaTime, false);
+                thePlayer.DestroyPlayer(7f, false, true);
+
 
                 return hitInfo2.point;
             }

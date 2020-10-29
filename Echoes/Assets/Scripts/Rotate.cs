@@ -15,6 +15,8 @@ public class Rotate : MonoBehaviour
     public float rotationDegree;    // величина в градусах на которую вращается радар
     public float rayLength;         // длина луча
     public float rayWidth;          // width of the ray
+    [SerializeField]
+    float rayStart;
 
     public LayerMask obstacleMask;  // маска преград
     public LayerMask mineMask;      // маска мин
@@ -90,20 +92,21 @@ public class Rotate : MonoBehaviour
     void LateUpdate()
     {
         // draw the ray
-        DrawRay(endCoord, transform.position + upVec * rayLength);
+        DrawRay(transform.position + upVec * rayStart, transform.position + upVec * rayLength);
     }
 
     void DrawRay(Vector3 endCoord1, Vector3 endCoord2)
     {
         // draw the ray
-        rayLineRenderer.SetPosition(0, transform.position); // start coordinates
-        
+        //rayLineRenderer.SetPosition(0, transform.position); // start coordinates
+        rayLineRenderer.SetPosition(0, endCoord1); // start coordinates
+
         //if (endCoord != Vector3.zero)
         //{
         //    rayLineRenderer.SetPosition(1, endCoord1);       // end obstacle hit coords
         //}
         //else
-            rayLineRenderer.SetPosition(1, endCoord2); // end of the ray coords
+        rayLineRenderer.SetPosition(1, endCoord2); // end of the ray coords
     }   
 
     public void DetectObjects(Vector3 vec)

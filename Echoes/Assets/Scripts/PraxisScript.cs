@@ -24,7 +24,7 @@ public class PraxisScript : MonoBehaviour
         {
             FindObjectOfType<MenuManager>().DisplayPraxisTaken(true);
 
-            skillManager.AddPraxisModule();
+            skillManager.HandlePraxisModule(1);
 
             am.Play("praxis_taken");
 

@@ -14,8 +14,11 @@ public class BoosterTurbov2 : MonoBehaviour
 
     float secondsPressed;   // time of space bar being pressed in seconds
 
+    float recoveryBoost;
+
     [SerializeField]
     float turboLength;      // length of turbo effect in seconds
+    float tp;               // turbo points
 
     [SerializeField]
     float turboRecovery;    // recovery time of turbo effect in seconds
@@ -54,9 +57,18 @@ public class BoosterTurbov2 : MonoBehaviour
         slider.SetSliderMaxValue(turboLength);
     }
     
-    public void SetLevel1Params()
+    public void SetPowerLevel(int levelToSet)
     {
+        powerLevel = levelToSet;
 
+        if (powerLevel == 1)
+        {
+            recoveryBoost = 1;
+        }
+        else if (powerLevel == 2)
+        {
+            recoveryBoost = 1.5f;
+        }
     }
 
     void Booster()
@@ -69,10 +81,11 @@ public class BoosterTurbov2 : MonoBehaviour
         {
             // start countdown
             startCountDown = true;
-            secondsPressed += Time.deltaTime;            
+            secondsPressed += Time.deltaTime;
+            tp = secondsPressed / recoveryBoost;        
             //Debug.Log("seconds pressed:" + secondsPressed);
 
-            if (secondsPressed > turboLength)   // when turbo is over
+            if (tp > turboLength)   // when turbo is over
             {
                 //Debug.Log("STOPE");
                 enableTurbo = false;
@@ -86,14 +99,24 @@ public class BoosterTurbov2 : MonoBehaviour
         {
             if (Time.time >= recoveryTime)  // after recovery time - start recovery
             {
-                if (secondsPressed > 0) // recover booster
+                if (tp > 0) // recover booster
                 {
-                    secondsPressed -= Time.deltaTime / recoveryRatio;
+                    tp -= Time.deltaTime / recoveryRatio;
+
+                    if (powerLevel != 2)
+                    {
+                        secondsPressed = tp;
+                    }
+                    else
+                    {
+                        secondsPressed = tp * recoveryBoost;
+                    }
+                    
                     enableTurbo = true;
                     startCountDown = true;
                 }
-            }            
-            
+            }                
+
         }
     }
 
@@ -108,7 +131,8 @@ public class BoosterTurbov2 : MonoBehaviour
         // display turbo progress bar
         if (startCountDown)
         {
-            slider.SetSliderValue(turboLength - secondsPressed);
+            slider.SetSliderValue(turboLength - tp);
+
         }
 
 

@@ -15,6 +15,10 @@ public class BoosterShieldV2 : MonoBehaviour
     float sp;               // shield points - health of the shield
     float currentSP;        // current shield points
 
+    bool invisible;
+
+    float dmgResist;
+
     [SerializeField]
     float timeBeforeRecovery;   // how long wait before recovery starts
     [SerializeField]
@@ -60,6 +64,19 @@ public class BoosterShieldV2 : MonoBehaviour
         slider.SetSliderMaxValue(currentSP);
     }
 
+    public void SetPowerLevel(int levelToSet)
+    {
+        powerLevel = levelToSet;
+
+        if (powerLevel == 1)
+        {
+            dmgResist = 1;
+        }
+        else if (powerLevel == 2) {
+            dmgResist = 1.5f;
+        }
+    }
+
     // Update is called once per frame
     void Update()
     {
@@ -67,9 +84,12 @@ public class BoosterShieldV2 : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.K) && powerLevel > 0)
         {
-            if (shieldAviable)
+            if (shieldAviable && !shieldOn)
             {
                 ActivateShield();
+            }
+            else if (shieldOn) {
+                DeactivateShield();
             }
         }
 
@@ -95,8 +115,8 @@ public class BoosterShieldV2 : MonoBehaviour
 
     void ActivateShield()
     {
-        if (!shieldOn)
-        {
+        //if (!shieldOn)
+        //{
             //Debug.Log("shield on");
             DrawShield(radius);
 
@@ -104,7 +124,7 @@ public class BoosterShieldV2 : MonoBehaviour
 
             shieldOn = true;
             thePlayer.shieldOn = true;
-        }
+        //}
         //else
         //{
         //    DrawShield(0);
@@ -128,17 +148,42 @@ public class BoosterShieldV2 : MonoBehaviour
         thePlayer.shieldOn = false;
     }
 
-    public void TakeDamage(float dmg)
+    public void TakeDamage(float dmg, bool ignoreInvinsibility)
     {
-        currentSP -= dmg;
-        recoveryTime = Time.time + timeBeforeRecovery;
-
-        //Debug.Log("sp = " + currentSP);
-        if (currentSP <= 0)
+        if (ignoreInvinsibility)
         {
-            currentSP = 0; 
-            DeactivateShield();
+            currentSP -= dmg / dmgResist;
+            recoveryTime = Time.time + timeBeforeRecovery;
+            if (currentSP <= 0)
+            {
+                currentSP = 0;
+                DeactivateShield();
+            }
         }
+
+        else if (!invisible)
+        {
+            currentSP -= dmg / dmgResist;
+            recoveryTime = Time.time + timeBeforeRecovery;
+
+            //Debug.Log("sp = " + currentSP);
+            if (currentSP <= 0)
+            {
+                currentSP = 0;
+                DeactivateShield();
+            }
+
+            invisible = true;
+            StartCoroutine(InvisibleForSeconds(1));
+        }
+        
+    }
+
+    IEnumerator InvisibleForSeconds(float time)
+    {
+        yield return new WaitForSeconds(time);
+
+        invisible = false;
     }
 
     void DrawShield(float rad)

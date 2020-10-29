@@ -13,11 +13,19 @@ public class SkillMenuScript : MonoBehaviour
     [SerializeField]
     Text skillText;
 
+    [SerializeField]
+    Button upgradeButton;
+
     string selectedSkill;
+
+    PowerManager powerMng;
 
     // Start is called before the first frame update
     void Start()
     {
+        powerMng = FindObjectOfType<PowerManager>();
+        upgradeButton.interactable = false;
+
         praxisPoints = 0;
         DisplayPraxisInfo();
     }
@@ -28,56 +36,18 @@ public class SkillMenuScript : MonoBehaviour
         
     }
 
-    public void AddPraxisModule()
+    public void HandlePraxisModule(int quanity)
     {
         //Debug.Log("praxis++");
-        praxisPoints++;
-        //DisplayPraxisInfo();
+        praxisPoints += quanity;
+        DisplayPraxisInfo();
     }
 
     public void DisplayPraxisInfo()
     {
         praxisText.text = "Praxis modules: " + praxisPoints;
     }
-
-    public void DisplayTurbo1()
-    {
-        selectedSkill = "turbo1";
-        DisplaySkillInfo(selectedSkill);
-    }
-
-    public void DisplayShield1()
-    {
-        selectedSkill = "shield1";
-        DisplaySkillInfo(selectedSkill);
-    }
-    public void DisplayMagnet()
-    {
-        selectedSkill = "magnet";
-        DisplaySkillInfo(selectedSkill);
-    }
-    public void DisplayStealth()
-    {
-        selectedSkill = "stealth";
-        DisplaySkillInfo(selectedSkill);
-    }
-
-    public void DisplayInfo()
-    {
-        selectedSkill = "info";
-        DisplaySkillInfo(selectedSkill);
-    }
-
-    public void DisplayBat1()
-    {
-        selectedSkill = "bat1";
-        DisplaySkillInfo(selectedSkill);
-    }
-    public void DisplayBat2()
-    {
-        selectedSkill = "bat2";
-        DisplaySkillInfo(selectedSkill);
-    }
+       
 
     void DisplaySkillInfo(string skill)
     {
@@ -86,32 +56,50 @@ public class SkillMenuScript : MonoBehaviour
         switch (skill)
         {
             case "info":
-                text = @"--------INFO--------
+                text = @"-------- INFO --------
 Use praxis modules to upgrade your systems. 
 
 Select a system for the information.";
                 break;
 
             case "turbo1":
-                text = @"Name: ""Turbo I""
+                text = @"-------- Turbo I --------
 
 Press 'SPACE' to use turbo.
-Gives you a speed boost for 5 seconds.
+Gives you a speed boost for 3 seconds.
 
 Requires 1 energy unit!";
                 break;
-           
-            case "shield1":
-                text = @"Name: ""Shield I""
 
-Press 'K' to activate shield.
+            case "turbo2":
+                text = @"-------- Turbo II --------
+
+Press 'SPACE' to use turbo.
+Increases initial speed boost length by 150%.
+
+Requires 1 energy unit!";
+                break;
+
+            case "shield1":
+                text = @"-------- Shield I --------
+
+Press 'K' to activate the shield.
 Protects you from explosions and lasers.
 
 Requires 1 energy unit!";
                 break;
 
+            case "shield2":
+                text = @"-------- Shield II --------
+
+Press 'K' to activate the shield.
+Increases the ammount of damage taken by 150%.
+
+Requires 1 energy unit!";
+                break;
+
             case "magnet":
-                text = @"Name: ""Magnet""
+                text = @"-------- Magnet --------
 
 Press 'M' to activate magnet.
 Detects nearby objets and attracts scrap.
@@ -120,29 +108,244 @@ Requires 1 energy unit!";
                 break;
 
             case "stealth":
-                text = @"Name: ""Invisibility""
+                text = @"------- Invisibility ------
 
 Press 'J' to activate invisibility.
-Hides you and your radar emmision from enemies.
+Hides you and your radar emmision from enemies for 5 seconds.
 
 Requires 1 energy unit!";
                 break;
 
             case "bat1":
-                text = @"Name: ""Battery I""
+                text = @"-------- Battery I --------
 
-Gives you additional enegy unit.
+Gives you additional energy unit.
+2 in total.
+
 Use it to power up your systems.";
                 break;
 
             case "bat2":
-                text = @"Name: ""Battery II""
+                text = @"-------- Battery II -------
 
-Gives you additional enegy unit.
+Gives you additional energy unit.
+3 in total.
+
 Use it to power up your systems.";
                 break;
         }
 
         skillText.text = text;
     }
+
+    void HandleUpgradeButton(string skill)
+    {
+        switch (skill)
+        {
+            case "info":
+                upgradeButton.interactable = false;
+                break;
+            case "turbo1":
+                if (powerMng.turboCap == 0 && praxisPoints > 0)
+                {
+                    upgradeButton.interactable = true;
+                }
+                else
+                {
+                    upgradeButton.interactable = false;
+                }
+                break;
+            case "turbo2":
+                if (powerMng.turboCap == 1 && praxisPoints > 0)
+                {
+                    upgradeButton.interactable = true;
+                }
+                else
+                {
+                    upgradeButton.interactable = false;
+                }
+                break;
+            case "stealth":
+                if (powerMng.turboCap >= 1 && powerMng.stealthCap == 0 && praxisPoints > 0)
+                {
+                    upgradeButton.interactable = true;
+                }
+                else
+                {
+                    upgradeButton.interactable = false;
+                }
+                break;
+            case "shield1":
+                if (powerMng.shieldCap == 0 && praxisPoints > 0)
+                {
+                    upgradeButton.interactable = true;
+                }
+                else
+                {
+                    upgradeButton.interactable = false;
+                }
+                break;
+            case "shield2":
+                if (powerMng.shieldCap == 1 && praxisPoints > 0)
+                {
+                    upgradeButton.interactable = true;
+                }
+                else
+                {
+                    upgradeButton.interactable = false;
+                }
+                break;
+            case "magnet":
+                if (powerMng.shieldCap >= 1 && powerMng.magnetCap == 0 && praxisPoints > 0)
+                {
+                    upgradeButton.interactable = true;
+                }
+                else
+                {
+                    upgradeButton.interactable = false;
+                }
+                break;
+            case "bat1":
+                if (powerMng.batCap == 1 && praxisPoints > 0)
+                {
+                    upgradeButton.interactable = true;
+                }
+                else
+                {
+                    upgradeButton.interactable = false;
+                }
+                break;
+            case "bat2":
+                if (powerMng.batCap == 2 && praxisPoints > 0)
+                {
+                    upgradeButton.interactable = true;
+                }
+                else
+                {
+                    upgradeButton.interactable = false;
+                }
+                break;
+        }
+    }
+
+    public void UpgradeSkill()
+    {
+        switch (selectedSkill)
+        {
+            case "turbo1":
+                powerMng.SetTurboCap(1);
+                HandlePraxisModule(-1);
+                upgradeButton.interactable = false;
+
+                if (powerMng.batCap == 0)                
+                    powerMng.SetBatCap(1);                
+
+                break;
+            case "turbo2":
+                powerMng.SetTurboCap(2);
+                HandlePraxisModule(-1);
+                upgradeButton.interactable = false;                
+                break;
+            case "stealth":
+                powerMng.SetStealthCap(1);
+                HandlePraxisModule(-1);
+                upgradeButton.interactable = false;
+                break;
+            case "shield1":
+                powerMng.SetShieldCap(1);
+                HandlePraxisModule(-1);
+                upgradeButton.interactable = false;
+
+                if (powerMng.batCap == 0)
+                    powerMng.SetBatCap(1);
+
+                break;
+            case "shield2":
+                powerMng.SetShieldCap(2);
+                HandlePraxisModule(-1);
+                upgradeButton.interactable = false;
+                break;
+            case "magnet":
+                powerMng.SetMagnetCap(1);
+                HandlePraxisModule(-1);
+                upgradeButton.interactable = false;
+                break;
+            case "bat1":
+                powerMng.SetBatCap(2);
+                HandlePraxisModule(-1);
+                upgradeButton.interactable = false;
+                break;
+            case "bat2":
+                powerMng.SetBatCap(3);
+                HandlePraxisModule(-1);
+                upgradeButton.interactable = false;
+                break;
+
+        }
+    }
+
+    public void DisplayInfo()
+    {
+        selectedSkill = "info";
+        DisplaySkillInfo(selectedSkill);
+        HandleUpgradeButton(selectedSkill);
+    }
+    #region Buttons
+    public void DisplayTurbo1()
+    {
+        selectedSkill = "turbo1";
+        DisplaySkillInfo(selectedSkill);
+        HandleUpgradeButton(selectedSkill);
+    }
+    public void DisplayTurbo2()
+    {
+        selectedSkill = "turbo2";
+        DisplaySkillInfo(selectedSkill);
+        HandleUpgradeButton(selectedSkill);
+    }
+
+    public void DisplayShield1()
+    {
+        selectedSkill = "shield1";
+        DisplaySkillInfo(selectedSkill);
+        HandleUpgradeButton(selectedSkill);
+
+    }
+    public void DisplayShield2()
+    {
+        selectedSkill = "shield2";
+        DisplaySkillInfo(selectedSkill);
+        HandleUpgradeButton(selectedSkill);
+
+    }
+    public void DisplayMagnet()
+    {
+        selectedSkill = "magnet";
+        DisplaySkillInfo(selectedSkill);
+        HandleUpgradeButton(selectedSkill);
+
+    }
+    public void DisplayStealth()
+    {
+        selectedSkill = "stealth";
+        DisplaySkillInfo(selectedSkill);
+        HandleUpgradeButton(selectedSkill);
+
+    }
+
+    public void DisplayBat1()
+    {
+        selectedSkill = "bat1";
+        DisplaySkillInfo(selectedSkill);
+        HandleUpgradeButton(selectedSkill);
+
+    }
+    public void DisplayBat2()
+    {
+        selectedSkill = "bat2";
+        DisplaySkillInfo(selectedSkill);
+        HandleUpgradeButton(selectedSkill);
+
+    }
+    #endregion
 }

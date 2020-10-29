@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using DG.Tweening;
 
 public class EnemyController : MonoBehaviour
 {
@@ -190,12 +191,17 @@ public class EnemyController : MonoBehaviour
         if (gameObject.CompareTag("rocket") && givePraxis)
         {
             if (!gameObject.GetComponent<RocketBoss>())
-            {
+            {                
                 GameObject praxis = gameObject.GetComponent<RocketController>().praxis;
                 Instantiate(praxis, transform.position, Quaternion.identity);
 
+                // instantiate praxis with delay - ne rabotaet suka :(
+                //GameObject praxis = null;
+                //Sequence s = DOTween.Sequence();
+                //s.AppendInterval(0.0f).AppendCallback(() => praxis = Instantiate(gameObject.GetComponent<RocketController>().praxis, transform.position, Quaternion.identity));
+
             }
-            
+
         }
 
         // потом уничтожаем сам объект
