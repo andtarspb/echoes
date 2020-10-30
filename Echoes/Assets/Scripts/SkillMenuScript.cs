@@ -16,17 +16,37 @@ public class SkillMenuScript : MonoBehaviour
     [SerializeField]
     Button upgradeButton;
 
+    [SerializeField]
+    GameObject checkTurbo1;
+    [SerializeField]
+    GameObject checkTurbo2;
+    [SerializeField]
+    GameObject checkStealth;
+    [SerializeField]
+    GameObject checkShield1;
+    [SerializeField]
+    GameObject checkShield2;
+    [SerializeField]
+    GameObject checkMagnet;
+    [SerializeField]
+    GameObject checkBat1;
+    [SerializeField]
+    GameObject checkBat2;
+
     string selectedSkill;
 
     PowerManager powerMng;
+    SaveManager sm;
 
     // Start is called before the first frame update
     void Start()
     {
+        sm = FindObjectOfType<SaveManager>();
+
         powerMng = FindObjectOfType<PowerManager>();
         upgradeButton.interactable = false;
 
-        praxisPoints = 0;
+        praxisPoints = sm.GetPraxisCount();
         DisplayPraxisInfo();
     }
 
@@ -47,7 +67,31 @@ public class SkillMenuScript : MonoBehaviour
     {
         praxisText.text = "Praxis modules: " + praxisPoints;
     }
-       
+
+    public void SavePraxis()
+    {
+        sm.SetPraxisCount(praxisPoints);
+    }
+
+    public void HandleCheckBoxes()
+    {
+        if (powerMng.turboCap >= 1)
+            checkTurbo1.SetActive(true);
+        if (powerMng.turboCap == 2)
+            checkTurbo2.SetActive(true);
+        if (powerMng.stealthCap == 1)
+            checkStealth.SetActive(true);
+        if (powerMng.shieldCap >= 1)
+            checkShield1.SetActive(true);
+        if (powerMng.shieldCap == 2)
+            checkShield2.SetActive(true);
+        if (powerMng.magnetCap == 1)
+            checkMagnet.SetActive(true);
+        if (powerMng.batCap >= 2)
+            checkBat1.SetActive(true);
+        if (powerMng.batCap == 3)
+            checkBat2.SetActive(true);
+    }
 
     void DisplaySkillInfo(string skill)
     {
@@ -280,8 +324,9 @@ Use it to power up your systems.";
                 HandlePraxisModule(-1);
                 upgradeButton.interactable = false;
                 break;
-
         }
+
+        HandleCheckBoxes();
     }
 
     public void DisplayInfo()

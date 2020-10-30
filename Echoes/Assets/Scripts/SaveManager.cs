@@ -51,6 +51,9 @@ public class SaveManager : MonoBehaviour
 
             // didn't show any messages
             SetMessageID(0);
+
+            // set initial capacities - no batteries, turbo, ...
+            SetInitialCapacities();
             
         }
 
@@ -83,6 +86,68 @@ public class SaveManager : MonoBehaviour
             rightPuzzle = true;
     }
 
+    #region skills
+    public void SetInitialCapacities()
+    {
+        PlayerPrefs.SetInt("batCap", 0);
+        PlayerPrefs.SetInt("turboCap", 0);
+        PlayerPrefs.SetInt("shieldCap", 0);
+        PlayerPrefs.SetInt("magnetCap", 0);
+        PlayerPrefs.SetInt("stealthCap", 0);
+        PlayerPrefs.SetInt("praxisCount", 0);
+    }
+
+    public void SetBatCap(int cap)
+    {
+        PlayerPrefs.SetInt("batCap", cap);
+    }
+    public int GetBatCap()
+    {
+        return PlayerPrefs.GetInt("batCap");
+    }
+    public void SetTurboCap(int cap)
+    {
+        PlayerPrefs.SetInt("turboCap", cap);
+    }
+    public int GetTurboCap()
+    {
+        return PlayerPrefs.GetInt("turboCap");
+    }
+    public void SetShieldCap(int cap)
+    {
+        PlayerPrefs.SetInt("shieldCap", cap);
+    }
+    public int GetShieldCap()
+    {
+        return PlayerPrefs.GetInt("shieldCap");
+    }
+    public void SetMagnetCap(int cap)
+    {
+        PlayerPrefs.SetInt("magnetCap", cap);
+    }
+    public int GetMagnetCap()
+    {
+        return PlayerPrefs.GetInt("magnetCap");
+    }
+    public void SetStealthCap(int cap)
+    {
+        PlayerPrefs.SetInt("stealthCap", cap);
+    }
+    public int GetStealthCap()
+    {
+        return PlayerPrefs.GetInt("stealthCap");
+    }
+    public void SetPraxisCount(int praxisModules)
+    {
+        PlayerPrefs.SetInt("praxisCount", praxisModules);
+    }
+    public int GetPraxisCount()
+    {
+        return PlayerPrefs.GetInt("praxisCount");
+    }
+    #endregion
+
+    #region Checkpoints
     public void SetCheckpointPos(Vector3 pos)
     {
         PlayerPrefs.SetFloat("lastCheckpointPosX", pos.x);
@@ -100,7 +165,9 @@ public class SaveManager : MonoBehaviour
 
         return pos;
     }
+    #endregion
 
+    #region Messages
     public int GetLastMessageID()
     {
         int id = PlayerPrefs.GetInt("messagesShowed");
@@ -111,8 +178,9 @@ public class SaveManager : MonoBehaviour
     {
         PlayerPrefs.SetInt("messagesShowed", lastMessageID);
     }
+    #endregion
 
-
+    #region where to start
     public void SetStartFromBegining(int fromBegining)
     {
         PlayerPrefs.SetInt("startFromBegining", fromBegining);
@@ -125,21 +193,7 @@ public class SaveManager : MonoBehaviour
             return true;
         else
             return false;
-    }
-
-    public void SetBossBattleWon(int isDefited)
-    {
-        PlayerPrefs.SetInt("bossDone", isDefited);
-    }
-
-    public bool CheckBossBattleWon()
-    {
-        int binarBool = PlayerPrefs.GetInt("bossDone");
-        if (binarBool == 1)
-            return true;
-        else
-            return false;
-    }
+    }   
 
     public void SetGamePlayed(int isPlayed)
     {
@@ -154,7 +208,9 @@ public class SaveManager : MonoBehaviour
         else
             return false;
     }
+    #endregion
 
+    #region Boss and puzzles
     public void SetLeftPuzzleSolved(int isSolved)
     {
         PlayerPrefs.SetInt("bossLPuzzleSolved", isSolved);
@@ -182,4 +238,19 @@ public class SaveManager : MonoBehaviour
         else
             return false;
     }
+
+    public void SetBossBattleWon(int isDefited)
+    {
+        PlayerPrefs.SetInt("bossDone", isDefited);
+    }
+
+    public bool CheckBossBattleWon()
+    {
+        int binarBool = PlayerPrefs.GetInt("bossDone");
+        if (binarBool == 1)
+            return true;
+        else
+            return false;
+    }
+    #endregion
 }

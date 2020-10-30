@@ -197,6 +197,7 @@ public class MenuManager : MonoBehaviour
             //skillMenu.GetComponent<SkillMenuScript>().DisplayPraxisInfo();
             skillManager.DisplayInfo();
             skillManager.DisplayPraxisInfo();
+            skillManager.HandleCheckBoxes();
 
             isPaused = true;
             SetKinObjects(true);

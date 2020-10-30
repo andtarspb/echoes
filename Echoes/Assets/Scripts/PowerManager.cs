@@ -60,32 +60,43 @@ public class PowerManager : MonoBehaviour
     BoosterInvis invisBooster;
     MagnetZone magnetBooster;
 
+    SaveManager sm;
+
     // Start is called before the first frame update
     void Start()
     {
+        sm = FindObjectOfType<SaveManager>();
+
+        int cap;
+
         // setting batery parameters
         //batCharged = 0;
-        SetBatCap(3);
+        cap = sm.GetBatCap();
+        SetBatCap(cap);
 
         // setting turbo parameters
         //turboCap = 0;
         //turboCharged = 0;
-        SetTurboCap(2);
+        cap = sm.GetTurboCap();
+        SetTurboCap(cap);
 
         // setting shield parameters
         //shieldCap = 0;
         //shieldCharged = 0;
-        SetShieldCap(2);
+        cap = sm.GetShieldCap();
+        SetShieldCap(cap);
 
         // setting stealth parameters
         //stealthCap = 0;
         //stealthCharged = 0;
-        SetStealthCap(1);
+        cap = sm.GetStealthCap();
+        SetStealthCap(cap);
 
         // setting stealth parameters
         //magnetCap = 0;
         //magnetCharged = 0;
-        SetMagnetCap(1);
+        cap = sm.GetMagnetCap();
+        SetMagnetCap(cap);
 
         // display charges
         //DisplayTurboCharges();
@@ -196,11 +207,6 @@ public class PowerManager : MonoBehaviour
         batCap = capacity;
         batCharged = batCap - (turboCharged + shieldCharged + stealthCharged + magnetCharged);
         DisplayBatteryCharges();
-
-        //SetTurboCap(turboCap);
-        //SetShieldCap(shieldCap);
-        //SetStealthCap(stealthCap);
-        //SetMagnetCap(magnetCap);
     }    
 
     public void SetTurboCap(int capacity)
@@ -252,7 +258,7 @@ public class PowerManager : MonoBehaviour
         magnetCap = capacity;
         //magnetCharged = 0;
         //SetBatCap(batCap);
-        DisplayMagnetCharges();
+        DisplayMagnetCharges();       
     }
 
 
@@ -261,6 +267,15 @@ public class PowerManager : MonoBehaviour
         batteryPanel.SetActive(show);
     }
 
+    public void SaveSkills()
+    {
+        
+        sm.SetBatCap(batCap);
+        sm.SetTurboCap(turboCap);
+        sm.SetShieldCap(shieldCap);
+        sm.SetStealthCap(stealthCap);
+        sm.SetMagnetCap(magnetCap);
+    }
 
     void DisplayBatteryCharges()
     {

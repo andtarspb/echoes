@@ -10,10 +10,16 @@ public class Checkpoint : MonoBehaviour
     SaveManager sm;
     AudioManager am;
 
+    SkillMenuScript skillMng;
+    PowerManager powerMng;
+
     void Start()
     {
         sm = FindObjectOfType<SaveManager>();
         am = FindObjectOfType<AudioManager>();
+
+        skillMng = FindObjectOfType<SkillMenuScript>();
+        powerMng = FindObjectOfType<PowerManager>();
     }
 
     void OnTriggerEnter(Collider other)
@@ -31,6 +37,9 @@ public class Checkpoint : MonoBehaviour
 
             // set checkpoint position to load from
             sm.SetCheckpointPos(transform.position);
+
+            skillMng.SavePraxis();
+            powerMng.SaveSkills();
 
             // desplay last messages
             if (lastMassageID != 0) 
