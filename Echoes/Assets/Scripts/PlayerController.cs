@@ -185,11 +185,16 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    void HandleSunkenCollision(Collision collision)
+    void HandleSunkenCollision(Collision collision, bool enter)
     {
+        if (enter)
+        {
+            audioManager.Play("sunken_hit");
+        }
+
         // если игрок сталкивается с обломком - покажи его
         if (collision.gameObject.tag == "sunken" && (Time.time >= nextTimeblinkSunken))
-        {
+        {            
             blinkManager.CreateBlinkFollow(blinkManager.blinkCircleGray, collision.transform.position, collision.gameObject);
             nextTimeblinkSunken = Time.time + blinkDelay;
         }
@@ -198,13 +203,13 @@ public class PlayerController : MonoBehaviour
     void OnCollisionEnter(Collision collision)
     {
         HandleObstacleCollision(collision);
-        HandleSunkenCollision(collision);
+        HandleSunkenCollision(collision, true);
     }
 
     void OnCollisionStay(Collision collision)
     {
         HandleObstacleCollision(collision);
-        HandleSunkenCollision(collision);
+        HandleSunkenCollision(collision, false);
     }
 
     void OnTriggerEnter(Collider other)

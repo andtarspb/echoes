@@ -31,6 +31,7 @@ public class EnemyController : MonoBehaviour
     LevelManager lvlManager;
     AudioManager audioManager;
     CameraShake camShake;
+    PlayerController thePlayer;
 
     float initDrag;
 
@@ -56,8 +57,12 @@ public class EnemyController : MonoBehaviour
         
         bm.CreateBlinkFollow(blinkType[0], transform.position, gameObject);
 
+        thePlayer = null;
         if (gameObject.tag == "sunken")
+        {
             initDrag = GetComponent<Rigidbody>().drag;
+            thePlayer = FindObjectOfType<PlayerController>();
+        }
     }
 
     GameObject[] AssignIcon()
@@ -289,6 +294,9 @@ public class EnemyController : MonoBehaviour
         // если обломок сталкивается с обломком - покажи его
         if (collision.gameObject.tag == "sunken" && gameObject.tag == "sunken")
         {
+            if (Vector3.Distance(thePlayer.transform.position, gameObject.transform.position) < 20)
+                audioManager.Play("sunken_hit");
+
             //bm.CreateBlinkFollow(blinkType[0], collision.transform.position, collision.gameObject);
             bm.CreateBlinkFollow(blinkType[0], transform.position, gameObject);
         }
@@ -304,6 +312,9 @@ public class EnemyController : MonoBehaviour
         if ((collision.gameObject.tag == "obstacle" || collision.gameObject.tag == "BBeaconEmitter" || collision.gameObject.tag == "emitter") 
             && gameObject.tag == "sunken")
         {
+            if (Vector3.Distance(thePlayer.transform.position, gameObject.transform.position) < 20)            
+                audioManager.Play("sunken_hit");            
+
             bm.CreateBlinkFollow(blinkType[0], transform.position, gameObject);
 
             // отталкиваем обломок

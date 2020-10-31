@@ -14,6 +14,7 @@ public class MenuManager : MonoBehaviour
     public GameObject SavingText;
     public GameObject PraxisTakenText;
     public GameObject skillMenu;
+    public GameObject skillHelpMenu;
 
     public Animator animator;
 
@@ -189,6 +190,16 @@ public class MenuManager : MonoBehaviour
         }
     }
 
+    public void OpenSkillHelpMenu()
+    {
+        skillHelpMenu.SetActive(true);
+    }
+
+    public void CloseSkillHelpMenu()
+    {
+        skillHelpMenu.SetActive(false);
+    }
+
     public void OpenSkillMenu()
     {
         if (!isPaused)
@@ -204,6 +215,8 @@ public class MenuManager : MonoBehaviour
 
             skillMenu.SetActive(true);
             Time.timeScale = 0f;
+
+            skillManager.ShowPressIText(false);
         }
         
     }

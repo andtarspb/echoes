@@ -33,6 +33,9 @@ public class SkillMenuScript : MonoBehaviour
     [SerializeField]
     GameObject checkBat2;
 
+    [SerializeField]
+    GameObject PressIText;
+
     string selectedSkill;
 
     PowerManager powerMng;
@@ -61,6 +64,14 @@ public class SkillMenuScript : MonoBehaviour
         //Debug.Log("praxis++");
         praxisPoints += quanity;
         DisplayPraxisInfo();
+
+        if (praxisPoints == 1 && powerMng.batCap == 0)
+            ShowPressIText(true);
+    }
+
+    public void ShowPressIText(bool show)
+    {
+        PressIText.SetActive(show);
     }
 
     public void DisplayPraxisInfo()
@@ -100,8 +111,8 @@ public class SkillMenuScript : MonoBehaviour
         switch (skill)
         {
             case "info":
-                text = @"-------- INFO --------
-Use praxis modules to upgrade your systems. 
+                text = @"----------- INFO ----------
+Use praxis modules to improve your systems. 
 
 Select a system for the information.";
                 break;
