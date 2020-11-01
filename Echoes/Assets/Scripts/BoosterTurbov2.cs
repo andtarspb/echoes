@@ -31,6 +31,8 @@ public class BoosterTurbov2 : MonoBehaviour
     PlayerController theplayer;
     Rotate theRadar;
 
+    AudioManager am;
+    bool soundIsPlaying;
 
     // UI
     [SerializeField]
@@ -46,6 +48,7 @@ public class BoosterTurbov2 : MonoBehaviour
     {
         theplayer = GetComponent<PlayerController>();
         theRadar = FindObjectOfType<Rotate>();
+        am = FindObjectOfType<AudioManager>();
 
         // set player's and radar's values
         theplayer.booster = turboBoost;
@@ -76,14 +79,21 @@ public class BoosterTurbov2 : MonoBehaviour
         // set player's and radar's values
         theplayer.turboOn = turboOn;
         theRadar.turboOn = turboOn;
+               
 
         if (turboOn)    // turbo on
         {
             // start countdown
             startCountDown = true;
             secondsPressed += Time.deltaTime;
-            tp = secondsPressed / recoveryBoost;        
+            tp = secondsPressed / recoveryBoost;
             //Debug.Log("seconds pressed:" + secondsPressed);
+
+            if (!soundIsPlaying)
+            {
+                am.Play("turbo_on");
+                soundIsPlaying = true;
+            }
 
             if (tp > turboLength)   // when turbo is over
             {
@@ -97,10 +107,14 @@ public class BoosterTurbov2 : MonoBehaviour
         }
         else
         {
+            soundIsPlaying = false;
+            am.Stop("turbo_on");
+
             if (Time.time >= recoveryTime)  // after recovery time - start recovery
             {
                 if (tp > 0) // recover booster
-                {
+                {                   
+
                     tp -= Time.deltaTime / recoveryRatio;
 
                     if (powerLevel != 2)
@@ -115,9 +129,8 @@ public class BoosterTurbov2 : MonoBehaviour
                     enableTurbo = true;
                     startCountDown = true;
                 }
-            }                
-
-        }
+            }
+        }        
     }
 
     void FixedUpdate()

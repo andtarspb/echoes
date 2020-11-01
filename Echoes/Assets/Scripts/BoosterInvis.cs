@@ -7,6 +7,9 @@ public class BoosterInvis : MonoBehaviour
     bool invisOn;           // if inxisibility effect is on
     bool enableInvis;       // if invisibility is aviable
 
+    bool invisActivated;
+    bool invisDeactivated;
+
     [SerializeField]
     SpriteRenderer greenCircle;
     [SerializeField]
@@ -28,8 +31,8 @@ public class BoosterInvis : MonoBehaviour
 
     Color initCircleColor;
     Color initRadarColor;
-    
 
+    AudioManager am;
     Rotate radar;
 
     // UI
@@ -44,6 +47,7 @@ public class BoosterInvis : MonoBehaviour
     void Start()
     {
         radar = FindObjectOfType<Rotate>();
+        am = FindObjectOfType<AudioManager>();
         line = radar.GetComponent<LineRenderer>();
 
         // save initial colors
@@ -54,6 +58,9 @@ public class BoosterInvis : MonoBehaviour
         recoveryRatio = invisRecovery / invisLength;
 
         slider.SetSliderMaxValue(invisLength);
+
+        invisActivated = false;
+        invisDeactivated = true;
     }
 
     // Update is called once per frame
@@ -69,12 +76,19 @@ public class BoosterInvis : MonoBehaviour
             if (enableInvis && powerLevel > 0)
             {
                 invisOn = true;
+
+                if (!invisActivated)
+                {
+                    am.Play("invis_on");
+                    invisActivated = true;
+                }
+                
             }
         }
 
         if (powerLevel == 0)
         {
-            invisOn = false;
+            invisOn = false;            
         }
 
         ActivateInvis();
@@ -105,11 +119,19 @@ public class BoosterInvis : MonoBehaviour
                 invisOn = false;
                 startCountDown = false;
 
+                invisDeactivated = false;
+
                 recoveryTime = Time.time + timeBeforeRecovery;
             }      
         }
-        else
+        else 
         {
+            if (!invisDeactivated)
+            {
+                invisDeactivated = true;
+                am.Play("invis_off");
+            }
+
             // make visible
             invisOn = false;
             greenCircle.color = new Color(initCircleColor.r, initCircleColor.g, initCircleColor.b, 1);
@@ -128,7 +150,7 @@ public class BoosterInvis : MonoBehaviour
                 else 
                 {
                     // can activate invisivility again only after it is fully recovered
-
+                    invisActivated = false;
                     enableInvis = true;
 
                     // play sound of recovery

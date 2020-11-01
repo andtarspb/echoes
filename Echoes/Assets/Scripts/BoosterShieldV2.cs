@@ -35,6 +35,7 @@ public class BoosterShieldV2 : MonoBehaviour
     BossBarScript slider;
 
     PlayerController thePlayer;
+    AudioManager am;
 
     // to draw shield
     [SerializeField]
@@ -50,6 +51,7 @@ public class BoosterShieldV2 : MonoBehaviour
     void Start()
     {
         thePlayer = FindObjectOfType<PlayerController>();
+        am = FindObjectOfType<AudioManager>();
 
         initRad = detectable.radius;
 
@@ -86,6 +88,7 @@ public class BoosterShieldV2 : MonoBehaviour
         {
             if (shieldAviable && !shieldOn)
             {
+                am.Play("shield_on");
                 ActivateShield();
             }
             else if (shieldOn) {

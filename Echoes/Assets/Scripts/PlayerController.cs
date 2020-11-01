@@ -42,6 +42,7 @@ public class PlayerController : MonoBehaviour
     public bool turboOn;
     public bool shieldOn;
     MagnetZone magnet;
+    BoosterTurbov2 turbo;
     BoosterShieldV2 shield;
 
     void Start()
@@ -61,6 +62,7 @@ public class PlayerController : MonoBehaviour
 
         shield = GetComponent<BoosterShieldV2>();
         magnet = FindObjectOfType<MagnetZone>();
+        turbo = FindObjectOfType<BoosterTurbov2>();
 
         direction = Vector3.up;
 
@@ -303,6 +305,9 @@ public class PlayerController : MonoBehaviour
     {
         if ((!inSafeZone && !shieldOn) ||    ignoreShield)    // if player not in the safe zone or not under the shield - destroy him
         {
+            audioManager.Stop("turbo_on");
+            magnet.playerAlive = false;
+
             camShake.Shake();
             timerManager.StopTimer();
 

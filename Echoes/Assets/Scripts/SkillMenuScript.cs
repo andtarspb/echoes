@@ -112,13 +112,14 @@ public class SkillMenuScript : MonoBehaviour
         {
             case "info":
                 text = @"----------- INFO ----------
+
 Use praxis modules to improve your systems. 
 
 Select a system for the information.";
                 break;
 
             case "turbo1":
-                text = @"-------- Turbo I --------
+                text = @"-------- Turbo I ----------
 
 Press 'SPACE' to use turbo.
 Gives you a speed boost for 3 seconds.
@@ -127,7 +128,7 @@ Requires 1 energy unit!";
                 break;
 
             case "turbo2":
-                text = @"-------- Turbo II --------
+                text = @"-------- Turbo II ---------
 
 Press 'SPACE' to use turbo.
 Increases initial speed boost length by 150%.
@@ -136,7 +137,7 @@ Requires 1 energy unit!";
                 break;
 
             case "shield1":
-                text = @"-------- Shield I --------
+                text = @"-------- Shield I ---------
 
 Press 'K' to activate the shield.
 Protects you from explosions and lasers.
@@ -154,7 +155,7 @@ Requires 1 energy unit!";
                 break;
 
             case "magnet":
-                text = @"-------- Magnet --------
+                text = @"---------- Magnet ---------
 
 Press 'M' to activate magnet.
 Detects nearby objets and attracts scrap.

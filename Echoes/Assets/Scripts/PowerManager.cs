@@ -61,11 +61,13 @@ public class PowerManager : MonoBehaviour
     MagnetZone magnetBooster;
 
     SaveManager sm;
+    AudioManager am;
 
     // Start is called before the first frame update
     void Start()
     {
         sm = FindObjectOfType<SaveManager>();
+        am = FindObjectOfType<AudioManager>();
 
         int cap;
 
@@ -110,6 +112,20 @@ public class PowerManager : MonoBehaviour
         magnetBooster = FindObjectOfType<MagnetZone>();
     }
 
+    void PowerOn(bool on)
+    {
+        if (on)
+        {
+            batCharged--;
+            am.Play("power_on");
+        }
+        else
+        {
+            batCharged++;
+            am.Play("power_off");
+        }
+    }
+
     // Update is called once per frame
     void Update()
     {
@@ -117,7 +133,7 @@ public class PowerManager : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Alpha1) && Input.GetKey(KeyCode.LeftShift) && turboCharged > 0)
         {
             //Debug.Log("turbo--");
-            batCharged++;
+            PowerOn(false);
             turboCharged--;
             //turboBooster.powerLevel = turboCharged;
             turboBooster.SetPowerLevel(turboCharged);
@@ -126,7 +142,7 @@ public class PowerManager : MonoBehaviour
         else if (Input.GetKeyDown(KeyCode.Alpha1) && batCharged > 0 && turboCharged < turboCap)
         {
             //Debug.Log("turbo++");
-            batCharged--;
+            PowerOn(true);
             turboCharged++;
             //turboBooster.powerLevel = turboCharged;
             turboBooster.SetPowerLevel(turboCharged);
@@ -137,7 +153,7 @@ public class PowerManager : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Alpha2) && Input.GetKey(KeyCode.LeftShift) && shieldCharged > 0)
         {
             //Debug.Log("shield--");
-            batCharged++;
+            PowerOn(false);
             shieldCharged--;
             //shieldBooster.powerLevel = shieldCharged;
             shieldBooster.SetPowerLevel(shieldCharged);
@@ -146,8 +162,8 @@ public class PowerManager : MonoBehaviour
         else if(Input.GetKeyDown(KeyCode.Alpha2) && batCharged > 0 && shieldCharged < shieldCap)
         {
             //Debug.Log("shield++");
-            batCharged--;
-            shieldCharged++;
+            PowerOn(true);
+            shieldCharged++;            
             //shieldBooster.powerLevel = shieldCharged;
             shieldBooster.SetPowerLevel(shieldCharged);
             DisplayShieldCharges();
@@ -156,7 +172,7 @@ public class PowerManager : MonoBehaviour
         // DISPLAY STEALTH CHARGES
         if (Input.GetKeyDown(KeyCode.Alpha3) && Input.GetKey(KeyCode.LeftShift) && stealthCharged > 0)
         {
-            batCharged++;
+            PowerOn(false);
             stealthCharged--;
             invisBooster.powerLevel = stealthCharged;
             DisplayStealthCharges();
@@ -164,7 +180,7 @@ public class PowerManager : MonoBehaviour
         else if(Input.GetKeyDown(KeyCode.Alpha3) && batCharged > 0 && stealthCharged < stealthCap)
         {
             //Debug.Log("stealth++");
-            batCharged--;
+            PowerOn(true);
             stealthCharged++;
             invisBooster.powerLevel = stealthCharged;
             DisplayStealthCharges();
@@ -173,7 +189,7 @@ public class PowerManager : MonoBehaviour
         // DISPLAY MAGNET CHARGES
         if (Input.GetKeyDown(KeyCode.Alpha4) && Input.GetKey(KeyCode.LeftShift) && magnetCharged > 0)
         {
-            batCharged++;
+            PowerOn(false);
             magnetCharged--;
             magnetBooster.powerLevel = magnetCharged;
             DisplayMagnetCharges();
@@ -181,7 +197,7 @@ public class PowerManager : MonoBehaviour
         else if (Input.GetKeyDown(KeyCode.Alpha4) && batCharged > 0 && magnetCharged < magnetCap)
         {
             //Debug.Log("stealth++");
-            batCharged--;
+            PowerOn(true);
             magnetCharged++;
             magnetBooster.powerLevel = magnetCharged;
             DisplayMagnetCharges();

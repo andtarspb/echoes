@@ -20,6 +20,8 @@ public class MagnetZone : MonoBehaviour
 
     public bool magnetAviable;
 
+    public bool playerAlive;
+
     [SerializeField]
     float attractionLength;
     [SerializeField]
@@ -34,12 +36,17 @@ public class MagnetZone : MonoBehaviour
     [SerializeField]
     BossBarScript slider;
 
+    AudioManager am;
+    bool soundIsPlaying;
+
     // power manager interactions
     public int powerLevel;
 
     // Start is called before the first frame update
     void Start()
     {
+        am = FindObjectOfType<AudioManager>();
+
         line = gameObject.GetComponent<LineRenderer>();
 
         line.SetVertexCount(segments + 1);
@@ -54,6 +61,8 @@ public class MagnetZone : MonoBehaviour
         slider.SetSliderMaxValue(attractionLength);
 
         recoveryRatio = attractionRecovery / attractionLength;
+
+        playerAlive = true;
     }
 
     void Update()
@@ -62,13 +71,19 @@ public class MagnetZone : MonoBehaviour
 
         //if (magnetAviable)
         //{
-        if (Input.GetKey(KeyCode.M) && magnetAviable && powerLevel > 0)
+        if (Input.GetKey(KeyCode.M) && magnetAviable && powerLevel > 0 && playerAlive)
         {
             ChangeRad();
 
             CreatePoints(radius);
             //ActivateMagnet();
             attract = true;
+
+            if (!soundIsPlaying)
+            {
+                am.Play("magnet_on");
+                soundIsPlaying = true;
+            }
 
             secondsPressed += Time.deltaTime;
             if (secondsPressed >= attractionLength)
@@ -103,6 +118,9 @@ public class MagnetZone : MonoBehaviour
 
     void RecoverMagnet()
     {
+        soundIsPlaying = false;
+        am.Stop("magnet_on");
+
         attract = false;
         //Debug.Log("deactivate circle");
         CreatePoints(0);
