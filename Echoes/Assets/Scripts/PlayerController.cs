@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
@@ -36,7 +34,9 @@ public class PlayerController : MonoBehaviour
     float blinkDelay = 0.5f;
 
     public bool inSafeZone;    // if player in safe zone    
-    
+
+    public bool canControl;              // if player canMove - not in a cutscene
+
     // turbo booster
     public float booster = 1f;
     public bool turboOn;
@@ -48,6 +48,7 @@ public class PlayerController : MonoBehaviour
     void Start()
     {
         isRadarOn = true;
+        canControl = true;
 
         //rb = GetComponent<Rigidbody>();
         var radar = FindObjectOfType<Rotate>();
@@ -67,8 +68,8 @@ public class PlayerController : MonoBehaviour
         direction = Vector3.up;
 
         nextTimeblink = Time.time;
-        nextTimeblinkSunken = Time.time;       
-}
+        nextTimeblinkSunken = Time.time;
+    }
 
     void FixedUpdate()
     {
@@ -77,8 +78,11 @@ public class PlayerController : MonoBehaviour
         mousePos = Camera.main.ScreenToWorldPoint(mousePos);
 
         FaceMouse(mousePos); // face mouse direction
-        
-        MovePlayer();
+
+        if (canControl)
+        {
+            MovePlayer();
+        }
 
         OtherInput();
     }
@@ -90,7 +94,7 @@ public class PlayerController : MonoBehaviour
         {
             realThrust = thrust * booster;
         }
-        
+
 
         // считаем расстояние от камеры до игрока, чтоб перемещаться только если курсор внутри ИКО
         float dst = Vector3.Distance(mousePos, transform.position) - Mathf.Abs(Camera.main.transform.position.z);
@@ -107,7 +111,7 @@ public class PlayerController : MonoBehaviour
         if (Input.GetMouseButton(0) && dst < radarRadius)
         {
             Vector3 force = transform.up * realThrust;
-            rb.AddForce(force) ;
+            rb.AddForce(force);
             //Debug.Log("Velocity: x = " + rb.velocity.x + "; y = " + rb.velocity.y + "; z = " + rb.velocity.z);
         }
 #if (UNITY_EDITOR)
@@ -125,7 +129,7 @@ public class PlayerController : MonoBehaviour
 
             rb.AddForce(Vector3.ClampMagnitude(force, 1) * realThrust);
         }
-        
+
     }
 
     void FaceMouse(Vector3 mousePosition)
@@ -149,7 +153,7 @@ public class PlayerController : MonoBehaviour
         //}
 
         // проверка трясущейся камеры: слабое и сильное трясение
-        if (Input.GetKeyDown(KeyCode.Z))    
+        if (Input.GetKeyDown(KeyCode.Z))
         {
             camShake.SmallShake();
         }
@@ -176,7 +180,7 @@ public class PlayerController : MonoBehaviour
 
             foreach (ContactPoint contact in collision.contacts)
             {
-                if (collision.gameObject.tag == "obstacle")                
+                if (collision.gameObject.tag == "obstacle")
                     blinkManager.CreateBlink(blinkManager.blinkGreen, contact.point);
                 if (collision.gameObject.tag == "door")
                     blinkManager.CreateBlink(blinkManager.blinkGray, collision.transform.position);
@@ -189,16 +193,17 @@ public class PlayerController : MonoBehaviour
 
     void HandleSunkenCollision(Collision collision, bool enter)
     {
-        if (enter)
-        {
-            audioManager.Play("sunken_hit");
-        }
 
         // если игрок сталкивается с обломком - покажи его
         if (collision.gameObject.tag == "sunken" && (Time.time >= nextTimeblinkSunken))
-        {            
+        {
             blinkManager.CreateBlinkFollow(blinkManager.blinkCircleGray, collision.transform.position, collision.gameObject);
             nextTimeblinkSunken = Time.time + blinkDelay;
+
+            if (enter)
+            {
+                audioManager.Play("sunken_hit");
+            }
         }
     }
 
@@ -222,7 +227,7 @@ public class PlayerController : MonoBehaviour
             //Debug.Log("Level completed!");
         }
 
-        if (other.tag == "mine"|| other.tag == "mine_boss" || other.tag == "rocket" || other.tag == "persuer")
+        if (other.tag == "mine" || other.tag == "mine_boss" || other.tag == "rocket" || other.tag == "persuer")
         {
             if (other.gameObject.GetComponent<RocketBoss>())
             {
@@ -231,7 +236,7 @@ public class PlayerController : MonoBehaviour
 
 
             other.gameObject.GetComponent<EnemyController>().BlowUpEnemy(false, false);
-            
+
             DestroyPlayer(11, false, false);
         }
 
@@ -246,12 +251,15 @@ public class PlayerController : MonoBehaviour
         if (other.tag == "dark_start")
         {
             radarRay.SetActive(false);
-            if (other.GetComponent<BlowUpMine>() != null)
+            if (other.GetComponent<StartBlueScreen>() != null)
             {
-                audioManager.Play("radar_off");
+                //audioManager.Play("radar_off");
 
-                other.GetComponent<BlowUpMine>().BlowMine();
-                other.gameObject.SetActive(false);
+                //other.GetComponent<BlowUpMine>().BlowMine();
+                other.GetComponent<StartBlueScreen>().ShowBlueScreen1();
+                //other.gameObject.SetActive(false);
+                other.gameObject.transform.position = new Vector3(
+                    other.gameObject.transform.position.x, other.gameObject.transform.position.y, other.gameObject.transform.position.z - 100);
             }
         }
         if (other.tag == "dark_stop")
@@ -260,7 +268,7 @@ public class PlayerController : MonoBehaviour
             {
                 audioManager.Play("radar_on");
                 radarRay.SetActive(true);
-            }       
+            }
         }
 
         // boss setion
@@ -268,7 +276,7 @@ public class PlayerController : MonoBehaviour
         {
             // start boss battle
             FindObjectOfType<BossBatleManager>().StartPhase1();
-            other.gameObject.SetActive(false);        
+            other.gameObject.SetActive(false);
         }
 
         // туннель вслепую
@@ -289,7 +297,9 @@ public class PlayerController : MonoBehaviour
         if (other.tag == "game_finish")
         {
             //Debug.Log("Game completed!");
-            menuManager.GameCompleted();
+
+            FindObjectOfType<FinishGame>().StartFinishSequence();
+            //menuManager.GameCompleted();
         }
     }
 
@@ -303,13 +313,13 @@ public class PlayerController : MonoBehaviour
 
     public bool DestroyPlayer(float dmg, bool ignoreShield, bool handleInvinsibility)
     {
-        if ((!inSafeZone && !shieldOn) ||    ignoreShield)    // if player not in the safe zone or not under the shield - destroy him
+        if ((!inSafeZone && !shieldOn) || ignoreShield)    // if player not in the safe zone or not under the shield - destroy him
         {
             audioManager.Stop("turbo_on");
             magnet.playerAlive = false;
 
             camShake.Shake();
-            timerManager.StopTimer();
+            timerManager.StopTimer(true);
 
             audioManager.Play("explosion");
 

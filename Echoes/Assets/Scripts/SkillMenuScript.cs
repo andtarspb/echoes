@@ -40,11 +40,13 @@ public class SkillMenuScript : MonoBehaviour
 
     PowerManager powerMng;
     SaveManager sm;
+    AudioManager am;
 
     // Start is called before the first frame update
     void Start()
     {
         sm = FindObjectOfType<SaveManager>();
+        am = FindObjectOfType<AudioManager>();
 
         powerMng = FindObjectOfType<PowerManager>();
         upgradeButton.interactable = false;
@@ -122,9 +124,7 @@ Select a system for the information.";
                 text = @"-------- Turbo I ----------
 
 Press 'SPACE' to use turbo.
-Gives you a speed boost for 3 seconds.
-
-Requires 1 energy unit!";
+Gives you a speed boost for 3 seconds.";
                 break;
 
             case "turbo2":
@@ -133,7 +133,7 @@ Requires 1 energy unit!";
 Press 'SPACE' to use turbo.
 Increases initial speed boost length by 150%.
 
-Requires 1 energy unit!";
+Requires: Turbo I";
                 break;
 
             case "shield1":
@@ -142,7 +142,7 @@ Requires 1 energy unit!";
 Press 'K' to activate the shield.
 Protects you from explosions and lasers.
 
-Requires 1 energy unit!";
+Warning: completley destroys missile with its praxis module!";
                 break;
 
             case "shield2":
@@ -151,7 +151,7 @@ Requires 1 energy unit!";
 Press 'K' to activate the shield.
 Increases the ammount of damage taken by 150%.
 
-Requires 1 energy unit!";
+Requires: Shield II";
                 break;
 
             case "magnet":
@@ -160,7 +160,7 @@ Requires 1 energy unit!";
 Press 'M' to activate magnet.
 Detects nearby objets and attracts scrap.
 
-Requires 1 energy unit!";
+Requires: Turbo I";
                 break;
 
             case "stealth":
@@ -169,7 +169,7 @@ Requires 1 energy unit!";
 Press 'J' to activate invisibility.
 Hides you and your radar emmision from enemies for 5 seconds.
 
-Requires 1 energy unit!";
+Requires: Shield I";
                 break;
 
             case "bat1":
@@ -178,7 +178,9 @@ Requires 1 energy unit!";
 Gives you additional energy unit.
 2 in total.
 
-Use it to power up your systems.";
+Use it to power up your systems.
+
+Requires: Turbo I or Shield I";
                 break;
 
             case "bat2":
@@ -187,7 +189,9 @@ Use it to power up your systems.";
 Gives you additional energy unit.
 3 in total.
 
-Use it to power up your systems.";
+Use it to power up your systems.
+
+Requires: Battery I";
                 break;
         }
 
@@ -222,7 +226,7 @@ Use it to power up your systems.";
                 }
                 break;
             case "stealth":
-                if (powerMng.turboCap >= 1 && powerMng.stealthCap == 0 && praxisPoints > 0)
+                if (powerMng.shieldCap >= 1 && powerMng.stealthCap == 0 && praxisPoints > 0)
                 {
                     upgradeButton.interactable = true;
                 }
@@ -252,7 +256,7 @@ Use it to power up your systems.";
                 }
                 break;
             case "magnet":
-                if (powerMng.shieldCap >= 1 && powerMng.magnetCap == 0 && praxisPoints > 0)
+                if (powerMng.turboCap >= 1 && powerMng.magnetCap == 0 && praxisPoints > 0)
                 {
                     upgradeButton.interactable = true;
                 }
@@ -339,6 +343,8 @@ Use it to power up your systems.";
         }
 
         HandleCheckBoxes();
+
+        am.Play("skill_upgrade");
     }
 
     public void DisplayInfo()

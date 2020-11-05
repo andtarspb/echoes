@@ -250,11 +250,10 @@ public class Rotate : MonoBehaviour
                 hit.collider.gameObject.GetComponent<EnemyController>().CreateBlink();
 
                 // отображаем сообщение о минах
-                if (hit.collider.gameObject.tag == "mine")
-                {
-                    chatMng.TypeMessage(3);
-
-                }
+                //if (hit.collider.gameObject.tag == "mine")
+                //{
+                //    chatMng.TypeMessage(3);
+                //}
 
                 // отображаем сообщение о ракетах
                 if (hit.collider.gameObject.tag == "rocket")

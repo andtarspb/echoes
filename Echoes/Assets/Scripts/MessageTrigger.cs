@@ -28,8 +28,9 @@ public class MessageTrigger : MonoBehaviour
         if (other.tag == "Player")
         {
             CallMessage();
+            gameObject.SetActive(false);
         }
 
-        gameObject.SetActive(false);
+        
     }
 }

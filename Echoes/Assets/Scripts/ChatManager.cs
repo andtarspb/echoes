@@ -73,11 +73,12 @@ public class ChatManager : MonoBehaviour
         if (lastId < id)
         {
             am.Play("msg_show");
-            string text = GetMessage(id);            
+            string text = GetMessage(id);
+
+            lastId = id;
 
             StartCoroutine(TypeText(text));
 
-            lastId = id;
             //saveManager.SetMessageID(id);
         }       
     }
@@ -121,10 +122,14 @@ Find a way to destroy it in order to open the door!";
 Watch out! This is an automatically guided missile.
 It catches your radar emission and moves to the place where you've spotted it.";
                 break;
-            case 7:
+            case 6:
                 msg = @"
 These proximity mines are equipped with radars to scan the area around. 
 Don't get caught by a red beam!";
+                break;
+            case 7:
+                msg = @"
+This is scrap. Don't worry it will not damage your hull";
                 break;
             case 8:
                 msg = @"
@@ -132,19 +137,20 @@ It looks like you need to turn on certain beacons in order to open the door.";
                 break;
             case 9:
                 msg = @"
-Damn, the explosion from a mine damaged your radar!
-I'll do my best to repair it.
-Although you'll have to move on without the radar for now.
+Damn, the military used an eloctromagnetic jammer!
+Your radar is uselles now...
+You have to move blindly from now on.
 Good luck, buddy...";
                 break;
             case 10:
                 msg = @"
-Great news, I've repaired the radar!";
+Great news, I've managed to repair the radar!";
                 break;
             case 11:
                 msg = @"
 Be careful, this is a guardian bot. 
-It will try to stop you. Destroy it!";
+It will try to stop you. 
+Find a way to destroy it!";
                 break;
             case 12:
                 msg = @"

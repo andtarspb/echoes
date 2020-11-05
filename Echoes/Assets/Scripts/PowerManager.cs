@@ -170,14 +170,14 @@ public class PowerManager : MonoBehaviour
         }
 
         // DISPLAY STEALTH CHARGES
-        if (Input.GetKeyDown(KeyCode.Alpha3) && Input.GetKey(KeyCode.LeftShift) && stealthCharged > 0)
+        if (Input.GetKeyDown(KeyCode.Alpha4) && Input.GetKey(KeyCode.LeftShift) && stealthCharged > 0)
         {
             PowerOn(false);
             stealthCharged--;
             invisBooster.powerLevel = stealthCharged;
             DisplayStealthCharges();
         }
-        else if(Input.GetKeyDown(KeyCode.Alpha3) && batCharged > 0 && stealthCharged < stealthCap)
+        else if(Input.GetKeyDown(KeyCode.Alpha4) && batCharged > 0 && stealthCharged < stealthCap)
         {
             //Debug.Log("stealth++");
             PowerOn(true);
@@ -187,14 +187,14 @@ public class PowerManager : MonoBehaviour
         }
 
         // DISPLAY MAGNET CHARGES
-        if (Input.GetKeyDown(KeyCode.Alpha4) && Input.GetKey(KeyCode.LeftShift) && magnetCharged > 0)
+        if (Input.GetKeyDown(KeyCode.Alpha3) && Input.GetKey(KeyCode.LeftShift) && magnetCharged > 0)
         {
             PowerOn(false);
             magnetCharged--;
             magnetBooster.powerLevel = magnetCharged;
             DisplayMagnetCharges();
         }
-        else if (Input.GetKeyDown(KeyCode.Alpha4) && batCharged > 0 && magnetCharged < magnetCap)
+        else if (Input.GetKeyDown(KeyCode.Alpha3) && batCharged > 0 && magnetCharged < magnetCap)
         {
             //Debug.Log("stealth++");
             PowerOn(true);

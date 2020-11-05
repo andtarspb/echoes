@@ -58,10 +58,15 @@ public class TimerManager : MonoBehaviour
         timerText.gameObject.SetActive(true);
     }
 
-    public void StopTimer()
+    public void StopTimer(bool showTime)
     {
         canCount = false;
-        //timerText.gameObject.SetActive(true);
+
+        if (!showTime)
+        {
+            timerText.gameObject.SetActive(false);
+
+        }
     }
 
     void GameOver()

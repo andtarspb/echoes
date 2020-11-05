@@ -367,6 +367,7 @@ public class BossBatleManager : MonoBehaviour
         bossCollider.enabled = true;
 
         // deactivate previous objects
+        am.Play("radar_off");
         DeactivateRadars();
         minesMovParent.gameObject.SetActive(false);
 
@@ -389,14 +390,12 @@ public class BossBatleManager : MonoBehaviour
     {
         // deativate old objects
         DeactivateRadars();
-        SetArch(2);
-
-        
+        SetArch(2);        
 
         FindObjectOfType<TimerManager>().StartTimer();
 
         sm.SetBossBattleWon(1);
-        sm.SetMessageID(11);
+        sm.SetMessageID(12);
 
         chatManager.TypeMessage(12);
     }
