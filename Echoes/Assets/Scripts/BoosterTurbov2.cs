@@ -39,9 +39,11 @@ public class BoosterTurbov2 : MonoBehaviour
     BossBarScript slider;
     bool startCountDown;    // when bar value is changes
 
-
     // power manager interactions
     public int powerLevel;
+
+    // achievement manager interactions
+    AchievementGameManager achievementsManager;
 
     // Start is called before the first frame update
     void Start()
@@ -49,6 +51,7 @@ public class BoosterTurbov2 : MonoBehaviour
         theplayer = GetComponent<PlayerController>();
         theRadar = FindObjectOfType<Rotate>();
         am = FindObjectOfType<AudioManager>();
+        achievementsManager = FindObjectOfType<AchievementGameManager>();
 
         // set player's and radar's values
         theplayer.booster = turboBoost;
@@ -154,6 +157,8 @@ public class BoosterTurbov2 : MonoBehaviour
             if (enableTurbo)
             {
                 turboOn = true;
+
+                achievementsManager.NotAceAnymore();
             }            
         }
         else if (Input.GetKeyUp(KeyCode.Space))

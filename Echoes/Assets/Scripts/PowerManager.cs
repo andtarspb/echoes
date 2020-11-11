@@ -69,42 +69,27 @@ public class PowerManager : MonoBehaviour
         sm = FindObjectOfType<SaveManager>();
         am = FindObjectOfType<AudioManager>();
 
-        int cap;
+        int cap;    // temporary capacity value for all the skills
 
         // setting batery parameters
-        //batCharged = 0;
         cap = sm.GetBatCap();
         SetBatCap(cap);
 
         // setting turbo parameters
-        //turboCap = 0;
-        //turboCharged = 0;
         cap = sm.GetTurboCap();
         SetTurboCap(cap);
 
         // setting shield parameters
-        //shieldCap = 0;
-        //shieldCharged = 0;
         cap = sm.GetShieldCap();
         SetShieldCap(cap);
 
         // setting stealth parameters
-        //stealthCap = 0;
-        //stealthCharged = 0;
         cap = sm.GetStealthCap();
         SetStealthCap(cap);
 
         // setting stealth parameters
-        //magnetCap = 0;
-        //magnetCharged = 0;
         cap = sm.GetMagnetCap();
         SetMagnetCap(cap);
-
-        // display charges
-        //DisplayTurboCharges();
-        //DisplayShieldCharges();
-        //DisplayStealthCharges();
-        //DisplayMagnetCharges();
 
         turboBooster = FindObjectOfType<BoosterTurbov2>();
         shieldBooster = FindObjectOfType<BoosterShieldV2>();
@@ -285,7 +270,7 @@ public class PowerManager : MonoBehaviour
 
     public void SaveSkills()
     {
-        
+        // save skills to the save manager
         sm.SetBatCap(batCap);
         sm.SetTurboCap(turboCap);
         sm.SetShieldCap(shieldCap);

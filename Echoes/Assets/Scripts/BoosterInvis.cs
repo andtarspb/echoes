@@ -34,6 +34,8 @@ public class BoosterInvis : MonoBehaviour
 
     AudioManager am;
     Rotate radar;
+    AchievementGameManager achievementsManager;
+
 
     // UI
     [SerializeField]
@@ -48,6 +50,8 @@ public class BoosterInvis : MonoBehaviour
     {
         radar = FindObjectOfType<Rotate>();
         am = FindObjectOfType<AudioManager>();
+        achievementsManager = FindObjectOfType<AchievementGameManager>();
+
         line = radar.GetComponent<LineRenderer>();
 
         // save initial colors
@@ -81,8 +85,11 @@ public class BoosterInvis : MonoBehaviour
                 {
                     am.Play("invis_on");
                     invisActivated = true;
+
+                    achievementsManager.NotAceAnymore();
+
                 }
-                
+
             }
         }
 

@@ -36,6 +36,7 @@ public class BoosterShieldV2 : MonoBehaviour
 
     PlayerController thePlayer;
     AudioManager am;
+    AchievementGameManager achievementsManager;
 
     // to draw shield
     [SerializeField]
@@ -52,6 +53,7 @@ public class BoosterShieldV2 : MonoBehaviour
     {
         thePlayer = FindObjectOfType<PlayerController>();
         am = FindObjectOfType<AudioManager>();
+        achievementsManager = FindObjectOfType<AchievementGameManager>();
 
         initRad = detectable.radius;
 
@@ -90,6 +92,9 @@ public class BoosterShieldV2 : MonoBehaviour
             {
                 am.Play("shield_on");
                 ActivateShield();
+
+                achievementsManager.NotAceAnymore();
+
             }
             else if (shieldOn) {
                 DeactivateShield();

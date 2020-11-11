@@ -39,6 +39,9 @@ public class MagnetZone : MonoBehaviour
     AudioManager am;
     bool soundIsPlaying;
 
+    AchievementGameManager achievementsManager;
+
+
     // power manager interactions
     public int powerLevel;
 
@@ -46,6 +49,7 @@ public class MagnetZone : MonoBehaviour
     void Start()
     {
         am = FindObjectOfType<AudioManager>();
+        achievementsManager = FindObjectOfType<AchievementGameManager>();
 
         line = gameObject.GetComponent<LineRenderer>();
 
@@ -83,6 +87,8 @@ public class MagnetZone : MonoBehaviour
             {
                 am.Play("magnet_on");
                 soundIsPlaying = true;
+
+                achievementsManager.NotAceAnymore();
             }
 
             secondsPressed += Time.deltaTime;

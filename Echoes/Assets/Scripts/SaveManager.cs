@@ -54,7 +54,12 @@ public class SaveManager : MonoBehaviour
 
             // set initial capacities - no batteries, turbo, ...
             SetInitialCapacities();
-            
+
+            // set that player have not used any skills
+            SetSkillUsed(false);
+
+            // set playtime = 0
+            SetPlayTime(0);
         }
 
         // place the player at he last checkpoint
@@ -85,6 +90,96 @@ public class SaveManager : MonoBehaviour
         if (CheckRightPuzzleSolved())
             rightPuzzle = true;
     }
+
+    #region achievements
+
+    #region ace
+    public void SetSkillUsed(bool wasUsed)
+    {
+        if (wasUsed)
+        {
+            PlayerPrefs.SetInt("wasSkillUsed", 1);
+        }
+        else
+        {
+            PlayerPrefs.SetInt("wasSkillUsed", 0);
+        }
+    }
+
+    public bool GetSkillUsed()
+    {
+        int binarBool = PlayerPrefs.GetInt("wasSkillUsed");
+        if (binarBool == 1)
+            return true;
+        else
+            return false;
+    }
+    
+    public void AchieveAce()
+    {
+        PlayerPrefs.SetInt("achAce", 1);
+    }
+
+    public bool GetAceAchievement()
+    {
+        int binarBool = PlayerPrefs.GetInt("achAce");
+        if (binarBool == 1)
+            return true;
+        else
+            return false;
+    }
+    #endregion
+
+    #region skillful
+    public void AchieveSkillful()
+    {
+        PlayerPrefs.SetInt("achSkill", 1);
+    }
+
+    public bool GetSkillfulAchievement()
+    {
+        int binarBool = PlayerPrefs.GetInt("achSkill");
+        if (binarBool == 1)
+            return true;
+        else
+            return false;
+    }
+    #endregion
+
+    #region speedrun
+   
+    public void SetPlayTime(float time)
+    {
+        PlayerPrefs.SetFloat("playTime", time);
+    }
+    public float GetPlayTime()
+    {
+        return PlayerPrefs.GetFloat("playTime");
+    }
+
+    public void AchieveSpeedrun()
+    {
+        PlayerPrefs.SetInt("achSpeed", 1);
+    }
+
+    public bool GetSpeedrunAchievement()
+    {
+        int binarBool = PlayerPrefs.GetInt("achSpeed");
+        if (binarBool == 1)
+            return true;
+        else
+            return false;
+    }
+    #endregion
+
+    public void ResetAchievements()
+    {
+        PlayerPrefs.SetInt("achAce", 0);
+        PlayerPrefs.SetInt("achSkill", 0);
+        PlayerPrefs.SetInt("achSpeed", 0); 
+    }
+
+    #endregion
 
     #region skills
     public void SetInitialCapacities()

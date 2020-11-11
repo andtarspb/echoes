@@ -41,12 +41,14 @@ public class SkillMenuScript : MonoBehaviour
     PowerManager powerMng;
     SaveManager sm;
     AudioManager am;
+    AchievementGameManager achievementsMng;
 
     // Start is called before the first frame update
     void Start()
     {
         sm = FindObjectOfType<SaveManager>();
         am = FindObjectOfType<AudioManager>();
+        achievementsMng = FindObjectOfType<AchievementGameManager>();
 
         powerMng = FindObjectOfType<PowerManager>();
         upgradeButton.interactable = false;
@@ -341,6 +343,8 @@ Requires: Battery I";
                 upgradeButton.interactable = false;
                 break;
         }
+
+        achievementsMng.CheckSkillfulAchievement();
 
         HandleCheckBoxes();
 

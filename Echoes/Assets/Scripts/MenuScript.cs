@@ -11,6 +11,9 @@ public class MenuScript : MonoBehaviour
     [SerializeField]
     GameObject loadingText;
 
+    [SerializeField]
+    GameObject achievementsMenu;
+
     SaveManager sm;
 
     void Start()
@@ -35,6 +38,16 @@ public class MenuScript : MonoBehaviour
     {
         loadingText.SetActive(true);
         SceneManager.LoadScene(1);
+    }
+
+    public void ShowAchievementsMenu()
+    {
+        achievementsMenu.SetActive(true);
+    }
+
+    public void HideAchievementsMenu()
+    {
+        achievementsMenu.SetActive(false);
     }
 
     public void QuitGame()
